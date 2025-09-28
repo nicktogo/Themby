@@ -49,7 +49,7 @@ class PlayerSetting{
   set iosVideoToolboxDecoding(bool value) => prefs.setBool(Constant.iosVideoToolboxDecodingKey, value);
 
 
-  int get iosBufferMultiplier => prefs.getInt(Constant.iosBufferMultiplierKey) ?? 2; // Reset to 2x for better balance between performance and stability
+  int get iosBufferMultiplier => prefs.getInt(Constant.iosBufferMultiplierKey) ?? 4; // Increase to 4x to prevent audio underruns
   set iosBufferMultiplier(int value) => prefs.setInt(Constant.iosBufferMultiplierKey, value);
 
 }

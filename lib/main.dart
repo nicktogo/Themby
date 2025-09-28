@@ -1,8 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:media_kit/media_kit.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,7 +15,10 @@ import 'objectbox.g.dart';
 
 
 void main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize MediaKit for video playback
+  MediaKit.ensureInitialized();
 
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
@@ -25,7 +26,7 @@ void main() async {
   final directory = await getApplicationDocumentsDirectory();
   final store = Store(getObjectBoxModel(), directory: join(directory.path, 'objectbox'));
   final deviceInfo = await initDevice();
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  final packageInfo = await PackageInfo.fromPlatform();
 
   runApp(
       ProviderScope(

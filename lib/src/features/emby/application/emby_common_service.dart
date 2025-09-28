@@ -94,7 +94,21 @@ List<Select> getMediaSource(List<MediaSource> sources){
   return sources
       .asMap()
       .entries
-      .map((e) => Select(title: e.value.name!, value: e.key.toString()))
+      .map((e) {
+        // 寻找视频流获取分辨率和编码信息
+        String displayTitle = e.value.name ?? '';
+
+        final videoStream = e.value.mediaStreams?.firstWhere(
+          (stream) => stream.type == 'Video',
+          orElse: () => MediaStream(),
+        );
+
+        if (videoStream?.displayTitle != null && videoStream!.displayTitle!.isNotEmpty) {
+          displayTitle = videoStream.displayTitle!;
+        }
+
+        return Select(title: displayTitle, value: e.key.toString());
+      })
       .toList();
 }
 

@@ -68,5 +68,10 @@
 		<!-- Memory and performance settings -->
 		<key>UIPrerenderedIcon</key>
 		<true/>
+		<!-- Custom fonts for subtitle rendering -->
+		<key>UIAppFonts</key>
+		<array>
+			<string>subfont.ttf</string>
+		</array>
 	</dict>
 </plist>

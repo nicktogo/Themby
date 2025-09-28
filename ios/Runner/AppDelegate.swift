@@ -1,5 +1,6 @@
 import Flutter
 import UIKit
+import CoreText
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -8,6 +9,28 @@ import UIKit
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
+
+    // Register Chinese font for subtitle rendering
+    registerChineseFont()
+
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
+
+  private func registerChineseFont() {
+    guard let fontPath = Bundle.main.path(forResource: "subfont", ofType: "ttf") else {
+      print("Warning: Chinese font not found in bundle")
+      return
+    }
+
+    let fontURL = URL(fileURLWithPath: fontPath)
+    var registrationError: Unmanaged<CFError>?
+
+    let success = CTFontManagerRegisterFontsForURL(fontURL as CFURL, .process, &registrationError)
+    if !success {
+      if let error = registrationError?.takeRetainedValue() {
+        print("Font registration failed: \(error.localizedDescription)")
+      }
+    }
+  }
+
 }
