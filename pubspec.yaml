@@ -81,6 +81,7 @@ dependencies:
   media_kit: ^1.1.11
   media_kit_video: ^1.2.5
   media_kit_libs_video: 1.0.5
+  media_kit_libs_ios_video: ^1.1.1
 
   #打开外部链接
   url_launcher: ^6.3.0
@@ -121,7 +122,7 @@ dependencies:
 
   flutter_localizations:
     sdk: flutter
-  intl: ^0.19.0
+  intl: ^0.20.2
 
   webdav_client: ^1.2.2
 

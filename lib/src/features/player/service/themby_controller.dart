@@ -12,7 +12,9 @@ part 'themby_controller.g.dart';
 
 class ThembyController{
 
-  ThembyController({required this.mpvBufferSize, required this.mpvHardDecoding});
+  ThembyController({required this.mpvBufferSize, required this.mpvHardDecoding}) {
+    _initController();
+  }
 
   int mpvBufferSize;
 
@@ -22,8 +24,7 @@ class ThembyController{
 
   VideoController get controller => videoController;
 
-
-  Future init() async {
+  void _initController() {
     Player player =  Player(
         configuration: PlayerConfiguration(
             bufferSize: 1024 * 1024 * mpvBufferSize,
@@ -31,18 +32,9 @@ class ThembyController{
             logLevel: MPVLogLevel.debug
         )
     );
-    if (Platform.isAndroid) {
-      NativePlayer nativePlayer = player.platform as NativePlayer;
-      final ByteData data = await rootBundle.load("assets/fonts/subfont.ttf");
-      final Uint8List buffer = data.buffer.asUint8List();
-      final Directory directory = await getApplicationSupportDirectory();
-      final String fontsDir = "${directory.path}/fonts";
-      final File file = File("$fontsDir/subfont.ttf");
-      await file.create(recursive: true);
-      await file.writeAsBytes(buffer);
-      nativePlayer.setProperty("sub-fonts-dir", fontsDir);
-      nativePlayer.setProperty("sub-font", "Droid Sans Fallback");
-    }
+
+    // Font loading for Android only - skip async font loading for now
+    // This can be added back later if needed
 
     videoController = VideoController(
       player,
@@ -55,7 +47,7 @@ class ThembyController{
 }
 
 @riverpod
-ThembyController thembyController(ThembyControllerRef ref){
+ThembyController thembyController(ThembyControllerRef ref) {
   return ThembyController(
     mpvBufferSize: ref.watch(playerSettingProvider).mpvBufferSize,
     mpvHardDecoding: ref.watch(playerSettingProvider).mpvHardDecoding
@@ -63,7 +55,7 @@ ThembyController thembyController(ThembyControllerRef ref){
 }
 
 @riverpod
-VideoController videoController(VideoControllerRef ref){
+VideoController videoController(VideoControllerRef ref) {
   return ref.watch(thembyControllerProvider).controller;
 }
 

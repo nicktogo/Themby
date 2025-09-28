@@ -28,6 +28,11 @@ Future<void> appStartup(AppStartupRef ref) async {
       systemNavigationBarDividerColor: Colors.transparent,
       statusBarColor: Colors.transparent,
     ));
+  } else if (Platform.isIOS) {
+    // Basic iOS status bar styling
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarBrightness: Brightness.light,
+    ));
   }
   MediaKit.ensureInitialized();
 }

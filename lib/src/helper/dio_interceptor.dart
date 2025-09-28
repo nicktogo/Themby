@@ -23,6 +23,7 @@ class DioInterceptor extends Interceptor{
     if (!url.contains('heartBeat')) {
 
       if ( err.type == DioExceptionType.cancel){
+        handler.next(err);
         return;
       }
 
@@ -31,7 +32,6 @@ class DioInterceptor extends Interceptor{
         displayType: SmartToastType.onlyRefresh,
       );
     }
-    super.onError(err, handler);
     handler.next(err);
   }
 

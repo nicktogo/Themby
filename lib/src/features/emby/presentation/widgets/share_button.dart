@@ -1,4 +1,5 @@
 
+import 'dart:io';
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
@@ -46,16 +47,21 @@ class ShareButton extends ConsumerWidget{
     }
 
     void openMxPlayer(String videoUrl) async {
-      final intent = AndroidIntent(
-        action: 'action_view',
-        data: videoUrl,
-        type: "video/*",
-      );
+      if (Platform.isAndroid) {
+        final intent = AndroidIntent(
+          action: 'action_view',
+          data: videoUrl,
+          type: "video/*",
+        );
 
-      try {
-        await intent.launch();
-      } catch (e) {
-        print('无法打开 MX Player: $e');
+        try {
+          await intent.launch();
+        } catch (e) {
+          print('无法打开 MX Player: $e');
+        }
+      } else {
+        // iOS - just show a message for now
+        SmartDialog.showToast('外部播放器功能在 iOS 上暂不支持');
       }
     }
 
