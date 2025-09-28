@@ -6,7 +6,7 @@ part of 'themby_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$thembyControllerHash() => r'276f96dada26029b6a099878b8ecfd7db6665e00';
+String _$thembyControllerHash() => r'e1826727a40bb83240156908e02f08a907f9bac5';
 
 /// See also [thembyController].
 @ProviderFor(thembyController)

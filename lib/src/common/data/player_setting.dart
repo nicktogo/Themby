@@ -33,7 +33,7 @@ class PlayerSetting{
   set mpvHardDecoding(bool value) => prefs.setBool(Constant.mpvHardDecodingKey, value);
 
 
-  int get mpvBufferSize => prefs.getInt(Constant.mpvBufferSizeKey) ?? 64;
+  int get mpvBufferSize => prefs.getInt(Constant.mpvBufferSizeKey) ?? 32; // Reduce default buffer size for iOS to improve responsiveness
   set mpvBufferSize(int value) => prefs.setInt(Constant.mpvBufferSizeKey, value);
 
 
@@ -43,6 +43,14 @@ class PlayerSetting{
 
   int get fastRewindTime => prefs.getInt(Constant.fastRewindTimeKey) ?? 10;
   set fastRewindTime(int value) => prefs.setInt(Constant.fastRewindTimeKey, value);
+
+
+  bool get iosVideoToolboxDecoding => prefs.getBool(Constant.iosVideoToolboxDecodingKey) ?? true;
+  set iosVideoToolboxDecoding(bool value) => prefs.setBool(Constant.iosVideoToolboxDecodingKey, value);
+
+
+  int get iosBufferMultiplier => prefs.getInt(Constant.iosBufferMultiplierKey) ?? 2; // Reset to 2x for better balance between performance and stability
+  set iosBufferMultiplier(int value) => prefs.setInt(Constant.iosBufferMultiplierKey, value);
 
 }
 

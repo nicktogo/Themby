@@ -29,10 +29,17 @@ Future<void> appStartup(AppStartupRef ref) async {
       statusBarColor: Colors.transparent,
     ));
   } else if (Platform.isIOS) {
-    // Basic iOS status bar styling
+    // iOS performance optimizations
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarBrightness: Brightness.light,
     ));
+
+    // Enable preferred frame rate for smoother video playback
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
   }
   MediaKit.ensureInitialized();
 }
@@ -43,7 +50,7 @@ class App extends ConsumerWidget{
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    final startup = ref.watch(appStartupProvider);
+    ref.watch(appStartupProvider);
 
     return MaterialApp.router(
       routerConfig: ref.watch(goRouterProvider),

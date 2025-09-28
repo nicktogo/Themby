@@ -11,6 +11,8 @@ class Constant{
   static const mpvBufferSizeKey = "bufferSize";
   static const fastForwardTimeKey = "fastForwardTime";
   static const fastRewindTimeKey = "fastRewindTime";
+  static const iosVideoToolboxDecodingKey = "iosVideoToolboxDecoding";
+  static const iosBufferMultiplierKey = "iosBufferMultiplier";
 
   //字幕配置
   static const subtitleSizeKey = "subtitleSize";

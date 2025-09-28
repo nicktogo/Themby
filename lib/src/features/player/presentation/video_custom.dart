@@ -1,5 +1,7 @@
 
 
+import 'dart:io';
+
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -74,6 +76,11 @@ class _VideoCustom extends ConsumerState<VideoCustom>{
                 padding: const EdgeInsets.all(24.0),
               ),
               controls: NoVideoControls,
+              // iOS-specific optimizations
+              width: Platform.isIOS ? MediaQuery.of(context).size.width : null,
+              height: Platform.isIOS ? MediaQuery.of(context).size.height : null,
+              aspectRatio: Platform.isIOS ? 16 / 9 : null, // Optimize aspect ratio for iOS
+              filterQuality: Platform.isIOS ? FilterQuality.medium : FilterQuality.low, // Better quality on iOS
             ),
             PlayControl(media: widget.media)
           ],

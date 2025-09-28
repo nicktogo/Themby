@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,6 +38,8 @@ class SubtitleSetting {
     color: Color(subtitleColor),
     fontWeight: subtitleBold ? FontWeight.bold : FontWeight.normal,
     backgroundColor: Colors.transparent,
+    // Add font family support for Chinese characters on different platforms
+    fontFamily: _getFontFamily(),
     // shadows: [
     //   Shadow(
     //     offset: const Offset(1.0, 1.0),
@@ -56,6 +60,17 @@ class SubtitleSetting {
     //   ),
     // ],
   );
+
+  String? _getFontFamily() {
+    if (Platform.isIOS) {
+      // Use system font on iOS which has built-in Chinese support
+      // Instead of specific font name, let iOS choose the best available
+      return '.SF UI Text'; // iOS system font with Chinese fallback
+    } else if (Platform.isAndroid) {
+      return 'Roboto'; // Let Android handle Chinese fallback
+    }
+    return null; // Use system default for other platforms
+  }
 }
 
 @riverpod
