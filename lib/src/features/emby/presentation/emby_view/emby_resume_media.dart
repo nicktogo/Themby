@@ -15,8 +15,6 @@ class EmbyResumeMedia extends ConsumerWidget{
 
     final resumes = ref.watch(getResumeMediaProvider());
 
-    print("resume构建时间${DateTime.now()}");
-
     List<String> actions = ["remove"];
     
     return resumes.when(

@@ -117,17 +117,23 @@ String truncateText(String text, int maxLength) {
 }
 
 String formatImageUrl({required String url, int? width, int? height}) {
+  // Validate URL before formatting
+  if (url.isEmpty || Uri.tryParse(url)?.hasScheme != true) {
+    return url; // Return original URL if invalid
+  }
 
-  if(width != null){
-
+  if (width != null) {
+    int finalWidth = width;
     for (int size in StyleString.imageSizes) {
-      if (width! <= size) {
-        width = size;
+      if (finalWidth <= size) {
+        finalWidth = size;
         break;
       }
     }
 
-    url = '$url&maxWidth=$width';
+    // Check if URL already has query parameters
+    final separator = url.contains('?') ? '&' : '?';
+    url = '$url${separator}maxWidth=$finalWidth';
   }
   return url;
 }

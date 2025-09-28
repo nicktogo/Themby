@@ -29,17 +29,20 @@ class MediaCardH extends ConsumerWidget{
   @override
   Widget build(BuildContext context,WidgetRef ref) {
 
-    String imageUrl = "";
+    String? imageUrl;
 
     if(item.type == "Episode") {
       imageUrl = (item.primaryImageAspectRatio ?? 0 ) >= 1
-          ? item.imagesCustom!.primary
-          : item.imagesCustom!.backdrop;
+          ? item.imagesCustom?.primary
+          : item.imagesCustom?.backdrop;
     }else{
-      imageUrl = item.imagesCustom?.backdrop.isNotEmpty == true
-          ? item.imagesCustom!.backdrop
-          : item.imagesCustom!.primary;
+      imageUrl = item.imagesCustom?.backdrop?.isNotEmpty == true
+          ? item.imagesCustom?.backdrop
+          : item.imagesCustom?.primary;
     }
+
+    // Ensure we have a valid imageUrl before proceeding
+    imageUrl = imageUrl?.isNotEmpty == true ? imageUrl : null;
 
     void openDialog(){
       SmartDialog.showAttach(
@@ -104,7 +107,7 @@ class MediaCardH extends ConsumerWidget{
             Stack(
               children: [
                 NetworkImgLayer(
-                  imageUrl: formatImageUrl(url: imageUrl,width: width.toInt()),
+                  imageUrl: imageUrl != null ? formatImageUrl(url: imageUrl, width: width.toInt()) : null,
                   width: width,
                   height: height,
                 ),

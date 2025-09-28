@@ -3,12 +3,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:themby/src/common/widget/dynamic_height_grid_view.dart';
 import 'package:themby/src/common/widget/empty_data.dart';
-import 'package:themby/src/common/widget/header_text.dart';
 import 'package:themby/src/common/widget/network_img_layer.dart';
 import 'package:themby/src/extensions/constrains.dart';
 import 'package:themby/src/features/emby/application/emby_common_service.dart';
@@ -95,17 +93,20 @@ class RecentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    String imageUrl = "";
+    String? imageUrl;
 
     if(data.type == "Episode") {
       imageUrl = (data.primaryImageAspectRatio ?? 0 ) >= 1
-          ? data.imagesCustom!.primary
-          : data.imagesCustom!.backdrop;
+          ? data.imagesCustom?.primary
+          : data.imagesCustom?.backdrop;
     }else{
-      imageUrl = data.imagesCustom?.backdrop.isNotEmpty == true
-          ? data.imagesCustom!.backdrop
-          : data.imagesCustom!.primary;
+      imageUrl = data.imagesCustom?.backdrop?.isNotEmpty == true
+          ? data.imagesCustom?.backdrop
+          : data.imagesCustom?.primary;
     }
+
+    // Ensure we have a valid imageUrl before proceeding
+    imageUrl = imageUrl?.isNotEmpty == true ? imageUrl : null;
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -118,7 +119,7 @@ class RecentCard extends StatelessWidget {
             width: width,
             height: height,
             child: NetworkImgLayer(
-              imageUrl: formatImageUrl(url: imageUrl,width: width.toInt(),height: height.toInt()),
+              imageUrl: imageUrl != null ? formatImageUrl(url: imageUrl,width: width.toInt(),height: height.toInt()) : null,
               width: width,
               height: height,
             ),
@@ -145,7 +146,7 @@ class RecentCard extends StatelessWidget {
             bottom: 10,
             right: 12,
             child: NetworkImgLayer(
-              imageUrl: data.imagesCustom?.primary,
+              imageUrl: data.imagesCustom?.primary?.isNotEmpty == true ? data.imagesCustom?.primary : null,
               width: width * 0.2,
               height: width * 0.2 / 0.68,
             ),
@@ -160,7 +161,7 @@ class RecentCard extends StatelessWidget {
                   height: height * 0.5,
                   width: width * 0.5,
                   alignment: Alignment.bottomLeft,
-                  imageUrl: formatImageUrl(url: data.imagesCustom!.logo,width: width.toInt(),height: height.toInt()),
+                  imageUrl: data.imagesCustom?.logo != null ? formatImageUrl(url: data.imagesCustom?.logo ?? "",width: width.toInt(),height: height.toInt()) : "",
                   errorWidget: (_,__,___) => Align(
                     alignment: Alignment.bottomLeft,
                     child: Text(

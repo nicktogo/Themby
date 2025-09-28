@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:internet_speed_meter/internet_speed_meter.dart';
@@ -17,7 +18,7 @@ class _InternetSpeedChip extends State<InternetSpeedChip>{
 
   final InternetSpeedMeter _internetSpeedMeterPlugin = InternetSpeedMeter();
 
-  late StreamSubscription _subscription;
+  StreamSubscription? _subscription;
 
   @override
   void initState() {
@@ -27,17 +28,46 @@ class _InternetSpeedChip extends State<InternetSpeedChip>{
   }
 
   void init() async {
-
-    _subscription = _internetSpeedMeterPlugin.getCurrentInternetSpeed().listen((event) {
+    // Check if platform supports internet speed measurement
+    if (!Platform.isAndroid) {
+      // Internet speed meter plugin only works on Android
       setState(() {
-        _currentSpeed = event;
+        _currentSpeed = '--';
       });
-    });
+      return;
+    }
+
+    try {
+      _subscription = _internetSpeedMeterPlugin.getCurrentInternetSpeed().listen(
+        (event) {
+          if (mounted) {
+            setState(() {
+              _currentSpeed = event;
+            });
+          }
+        },
+        onError: (error) {
+          // Handle errors gracefully
+          if (mounted) {
+            setState(() {
+              _currentSpeed = '--';
+            });
+          }
+        },
+      );
+    } catch (e) {
+      // Fallback if plugin fails to initialize
+      if (mounted) {
+        setState(() {
+          _currentSpeed = '--';
+        });
+      }
+    }
   }
 
   @override
   void dispose() {
-    _subscription.cancel();
+    _subscription?.cancel();
     super.dispose();
   }
 

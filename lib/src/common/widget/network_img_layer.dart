@@ -56,7 +56,12 @@ class NetworkImgLayer extends StatelessWidget {
       memCacheWidth = width.toInt();
     }
 
-    return imageUrl != '' && imageUrl != null
+    // Validate URL before attempting to load image
+    bool isValidUrl = imageUrl != null &&
+                     imageUrl!.isNotEmpty &&
+                     Uri.tryParse(imageUrl!)?.hasScheme == true;
+
+    return isValidUrl
         ? ClipRRect(
       clipBehavior: Clip.antiAlias,
       borderRadius: BorderRadius.circular(
