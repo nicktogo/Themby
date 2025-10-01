@@ -77,7 +77,7 @@ class SearchRepository{
             "IncludeItemTypes": "Movie,Series",
             "SortBy": "SortName",
             "SortOrder": "Ascending",
-            "SearchTerm": "${query!}%",
+            "SearchTerm": query!,
             'Recursive': 'true',
             "Fields": "BasicSyncInfo,CanDelete,PrimaryImageAspectRatio,ProductionYear,Status,EndDate,CommunityRating",
             "EnableImageTypes": "Primary,Backdrop,Thumb",
