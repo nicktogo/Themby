@@ -35,17 +35,11 @@ Future<String> getLibassFontsDir() async {
 
       // Write the font data to the file system.
       await fontFile.writeAsBytes(bytes, flush: true);
-      print('✅ Font asset successfully extracted to: ${fontFile.path}');
-      print('📁 Font directory for libass: ${fontsDir.path}');
     } catch (e) {
-      print('❌ Error extracting font asset: $e');
       // If extraction fails, return the base support directory as a fallback.
       // libass might not find the font, but the app won't crash.
       return supportDir.path;
     }
-  } else {
-    print('✅ Font file already exists: ${fontFile.path}');
-    print('📁 Font directory for libass: ${fontsDir.path}');
   }
 
   // Return the path to the DIRECTORY containing the fonts.

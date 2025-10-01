@@ -20,8 +20,6 @@ void main() async {
   // Initialize MediaKit for video playback
   MediaKit.ensureInitialized();
 
-  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-
   final prefs = await SharedPreferences.getInstance();
   final directory = await getApplicationDocumentsDirectory();
   final store = Store(getObjectBoxModel(), directory: join(directory.path, 'objectbox'));
@@ -39,9 +37,5 @@ void main() async {
         child: const App()
       )
   );
-
-  // Timer(const Duration(milliseconds: 500), () {
-  //   FlutterNativeSplash.remove();
-  // });
 }
 

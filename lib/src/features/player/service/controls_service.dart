@@ -132,40 +132,6 @@ class ControlsService extends _$ControlsService{
     final player = ref.read(videoControllerProvider).player;
     List<SubtitleTrack> subtitles = player.state.tracks.subtitle;
 
-    // === 字幕调试信息 ===
-    print("=== SUBTITLE DEBUG INFO ===");
-    print("Total subtitle tracks: ${subtitles.length}");
-    print("Requesting index: $index (actual track: ${index + 2})");
-
-    for (int i = 0; i < subtitles.length; i++) {
-      final track = subtitles[i];
-      print("Track $i:");
-      print("  - ID: ${track.id}");
-      print("  - Title: ${track.title}");
-      print("  - Language: ${track.language}");
-      print("  - Codec: ${track.codec}");
-      print("  - URI: ${track.uri}");
-      print("  - isSelected: ${track == player.state.track.subtitle}");
-
-      // Additional detailed info for the selected track
-      if (i == index + 2) {
-        print("  >>> THIS IS THE SELECTED TRACK <<<");
-        print("  - Full URI: ${track.uri}");
-        print("  - Subtitle source analysis:");
-        if (track.title?.contains('HBO') == true) {
-          print("    * HBO official subtitle (likely Windows font specs)");
-        } else {
-          print("    * Community/fansub subtitle (likely cross-platform fonts)");
-        }
-        if (track.codec == 'ass') {
-          print("    * ASS format: Should contain font specifications");
-        } else if (track.codec == 'subrip') {
-          print("    * SRT format: No font info, relies on player defaults");
-        }
-      }
-    }
-    print("=== END SUBTITLE DEBUG ===");
-
     await ref.read(videoControllerProvider).player.stream.buffer.first;
     await player.setSubtitleTrack(subtitles[index + 2]);
   }

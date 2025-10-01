@@ -40,25 +40,6 @@ class SubtitleSetting {
     backgroundColor: Colors.transparent,
     // Use platform-specific fonts that support Chinese characters
     fontFamily: _getChineseFontFamily(),
-    // shadows: [
-    //   Shadow(
-    //     offset: const Offset(1.0, 1.0),
-    //     color: Colors.black.withOpacity(0.4),
-    //     blurRadius: 3.0,
-    //   ),
-    //   // 第二层阴影：略深的颜色和较大的偏移量
-    //   Shadow(
-    //     offset: const Offset(2.0, 2.0),
-    //     color: Colors.black.withOpacity(0.6),
-    //     blurRadius: 6.0,
-    //   ),
-    //   // 第三层阴影：最深的颜色和最大的模糊半径
-    //   Shadow(
-    //     offset: const Offset(4.0, 4.0),
-    //     color: Colors.black.withOpacity(0.8),
-    //     blurRadius: 8.0,
-    //   ),
-    // ],
   );
 
   String? _getChineseFontFamily() {
