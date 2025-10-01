@@ -38,39 +38,18 @@ class SubtitleSetting {
     color: Color(subtitleColor),
     fontWeight: subtitleBold ? FontWeight.bold : FontWeight.normal,
     backgroundColor: Colors.transparent,
-    // Add font family support for Chinese characters on different platforms
-    fontFamily: _getFontFamily(),
-    // shadows: [
-    //   Shadow(
-    //     offset: const Offset(1.0, 1.0),
-    //     color: Colors.black.withOpacity(0.4),
-    //     blurRadius: 3.0,
-    //   ),
-    //   // 第二层阴影：略深的颜色和较大的偏移量
-    //   Shadow(
-    //     offset: const Offset(2.0, 2.0),
-    //     color: Colors.black.withOpacity(0.6),
-    //     blurRadius: 6.0,
-    //   ),
-    //   // 第三层阴影：最深的颜色和最大的模糊半径
-    //   Shadow(
-    //     offset: const Offset(4.0, 4.0),
-    //     color: Colors.black.withOpacity(0.8),
-    //     blurRadius: 8.0,
-    //   ),
-    // ],
+    // Use platform-specific fonts that support Chinese characters
+    fontFamily: _getChineseFontFamily(),
   );
 
-  String? _getFontFamily() {
+  String? _getChineseFontFamily() {
     if (Platform.isIOS) {
-      // Use system font on iOS which has built-in Chinese support
-      // Instead of specific font name, let iOS choose the best available
-      return '.SF UI Text'; // iOS system font with Chinese fallback
-    } else if (Platform.isAndroid) {
-      return 'Roboto'; // Let Android handle Chinese fallback
+      return null; // Let libass use system font fallback
+    } else {
+      return 'NotoSansSC-Regular'; // Custom font for Android
     }
-    return null; // Use system default for other platforms
   }
+
 }
 
 @riverpod
