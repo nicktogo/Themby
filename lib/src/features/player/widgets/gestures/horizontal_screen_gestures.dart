@@ -150,46 +150,58 @@ class _HorizontalScreenGestures extends ConsumerState<HorizontalScreenGestures>{
         ref.read(volumeBrightnessServiceProvider.notifier).onVerticalDragEnd(details);
       },
       /// 横向滑动开始
-      // onHorizontalDragStart: (details) async{
-      //   /// 打开进度条提示
-      //
-      //   Duration position = ref.read(videoControllerProvider).player.state.position;
-      //   ref.read(dragingTimeProvider.notifier).update(position);
-      //
-      //
-      //   await SmartDialog.show(
-      //       tag: "progress_toast",
-      //       alignment: Alignment.topCenter,
-      //       maskColor: Colors.transparent,
-      //       builder: (_) => const ProgressToast(),
-      //       keepSingle: true
-      //   );
-      // },
+      onHorizontalDragStart: (details) {
+        if (lock) return;
+        if(!ref.read(playerSettingProvider).horizontalSwipeSeek){
+          return;
+        }
+
+        final Duration position = ref.read(videoControllerProvider).player.state.position;
+        ref.read(dragingTimeProvider.notifier).update(position);
+
+        SmartDialog.show(
+            tag: "progress_toast",
+            alignment: Alignment.topCenter,
+            maskColor: Colors.transparent,
+            builder: (_) => const ProgressToast(),
+            keepSingle: true
+        );
+      },
       /// 横向滑动更新
-      // onHorizontalDragUpdate: (details) async{
-      //
-      //   final current = ref.read(dragingTimeProvider);
-      //
-      //   final double scale = 90000 / width;
-      //   final pos = Duration(
-      //       milliseconds: current.inMilliseconds + (details.delta.dx * scale).round()
-      //   );
-      //
-      //   final Duration result = pos.clamp(Duration.zero, controllerState.player.state.duration);
-      //
-      //   ref.read(dragingTimeProvider.notifier).update(result);
-      // },
-      // /// 横向滑动结束
-      // onHorizontalDragEnd: (details) async{
-      //   final pos = ref.read(dragingTimeProvider);
-      //   controllerState.player.seek(pos);
-      //   ///关闭toast 并 进行跳转
-      //   ref.invalidate(dragingTimeProvider);
-      //   await SmartDialog.dismiss(tag: "progress_toast");
-      // },
-      // onHorizontalDragCancel: () async{
-      //   await SmartDialog.dismiss(tag: "progress_toast");
-      // },
+      onHorizontalDragUpdate: (details) {
+        if (lock) return;
+        if(!ref.read(playerSettingProvider).horizontalSwipeSeek){
+          return;
+        }
+
+        final Duration current = ref.read(dragingTimeProvider);
+
+        final double scale = 90000 / width;
+        final pos = Duration(
+            milliseconds: current.inMilliseconds + (details.delta.dx * scale).round()
+        );
+
+        final Duration result = pos.clamp(Duration.zero, controllerState.player.state.duration);
+
+        ref.read(dragingTimeProvider.notifier).update(result);
+      },
+      /// 横向滑动结束
+      onHorizontalDragEnd: (details) async {
+        if (lock) return;
+        if(!ref.read(playerSettingProvider).horizontalSwipeSeek){
+          return;
+        }
+        final pos = ref.read(dragingTimeProvider);
+        controllerState.player.seek(pos);
+        ref.read(dragingTimeProvider.notifier).reset();
+        await SmartDialog.dismiss(tag: "progress_toast");
+      },
+      onHorizontalDragCancel: () async{
+        if(!ref.read(playerSettingProvider).horizontalSwipeSeek){
+          return;
+        }
+        await SmartDialog.dismiss(tag: "progress_toast");
+      },
     );
   }
 }

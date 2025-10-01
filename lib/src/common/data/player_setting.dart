@@ -29,6 +29,10 @@ class PlayerSetting{
   set longPressSpeed(bool value) => prefs.setBool(Constant.longPressSpeedKey, value);
 
 
+  bool get horizontalSwipeSeek => prefs.getBool(Constant.horizontalSwipeSeekKey) ?? true;
+  set horizontalSwipeSeek(bool value) => prefs.setBool(Constant.horizontalSwipeSeekKey, value);
+
+
   bool get mpvHardDecoding => prefs.getBool(Constant.mpvHardDecodingKey) ?? true;
   set mpvHardDecoding(bool value) => prefs.setBool(Constant.mpvHardDecodingKey, value);
 

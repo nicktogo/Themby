@@ -26,11 +26,18 @@ class SettingPlayerScreen extends ConsumerWidget{
             SettingItem(
               leading: const Icon(Icons.swipe),
               title: const Text("定位手势"),
-              subtitle: const Text("水平滑动调整视频进度,  待做..."),
+              subtitle: const Text("水平滑动调整视频进度"),
               trailing: Switch(
-                value: true,
-                onChanged: (value) {},
-              )
+                value: ref.watch(playerSettingProvider).horizontalSwipeSeek,
+                onChanged: (value) {
+                  ref.read(playerSettingProvider).horizontalSwipeSeek = value;
+                  ref.refresh(playerSettingProvider);
+                },
+              ),
+              onTap: () {
+                ref.read(playerSettingProvider).horizontalSwipeSeek = !ref.read(playerSettingProvider).horizontalSwipeSeek;
+                ref.refresh(playerSettingProvider);
+              },
             ),
             SettingItem(
               leading: const Icon(Icons.swipe_vertical),

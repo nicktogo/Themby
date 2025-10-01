@@ -6,12 +6,11 @@ part of 'draging_time.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$dragingTimeHash() => r'3216eea8446809e096b56db18f7f81627c0a41cd';
+String _$dragingTimeHash() => r'f62d2bbd191f934f00d8fd6dbdb60ddf9b2c05ad';
 
 /// See also [DragingTime].
 @ProviderFor(DragingTime)
-final dragingTimeProvider =
-    AutoDisposeNotifierProvider<DragingTime, Duration>.internal(
+final dragingTimeProvider = NotifierProvider<DragingTime, Duration>.internal(
   DragingTime.new,
   name: r'dragingTimeProvider',
   debugGetCreateSourceHash:
@@ -20,6 +19,6 @@ final dragingTimeProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$DragingTime = AutoDisposeNotifier<Duration>;
+typedef _$DragingTime = Notifier<Duration>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

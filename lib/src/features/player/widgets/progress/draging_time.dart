@@ -4,7 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'draging_time.g.dart';
 
 
-@riverpod
+@Riverpod(keepAlive: true)
 class DragingTime extends _$DragingTime{
 
   @override
@@ -12,5 +12,9 @@ class DragingTime extends _$DragingTime{
 
   void update(Duration value) {
     state = value;
+  }
+
+  void reset() {
+    state = Duration.zero;
   }
 }
