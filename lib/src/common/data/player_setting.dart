@@ -33,7 +33,7 @@ class PlayerSetting{
   set mpvHardDecoding(bool value) => prefs.setBool(Constant.mpvHardDecodingKey, value);
 
 
-  int get mpvBufferSize => prefs.getInt(Constant.mpvBufferSizeKey) ?? 32; // Reduce default buffer size for iOS to improve responsiveness
+  int get mpvBufferSize => prefs.getInt(Constant.mpvBufferSizeKey) ?? 64; // Default buffer size matches slider minimum
   set mpvBufferSize(int value) => prefs.setInt(Constant.mpvBufferSizeKey, value);
 
 
