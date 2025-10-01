@@ -43,9 +43,8 @@ class SubtitleSetting {
   );
 
   String? _getChineseFontFamily() {
-    // Test: Let libass use system font fallback on iOS
     if (Platform.isIOS) {
-      return null; // No font specified - let libass use system defaults
+      return null; // Let libass use system font fallback
     } else {
       return 'NotoSansSC-Regular'; // Custom font for Android
     }

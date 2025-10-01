@@ -18,19 +18,13 @@ import CoreText
 
   private func registerChineseFont() {
     guard let fontPath = Bundle.main.path(forResource: "subfont", ofType: "ttf") else {
-      print("Warning: Chinese font not found in bundle")
       return
     }
 
     let fontURL = URL(fileURLWithPath: fontPath)
     var registrationError: Unmanaged<CFError>?
 
-    let success = CTFontManagerRegisterFontsForURL(fontURL as CFURL, .process, &registrationError)
-    if !success {
-      if let error = registrationError?.takeRetainedValue() {
-        print("Font registration failed: \(error.localizedDescription)")
-      }
-    }
+    CTFontManagerRegisterFontsForURL(fontURL as CFURL, .process, &registrationError)
   }
 
 }

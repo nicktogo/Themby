@@ -50,15 +50,6 @@ class ThembyController{
         )
     );
 
-    final logger = ThembyLogger();
-    logger.i('Initializing video player - Platform: ${isIOS ? 'iOS' : 'Android'}');
-
-    if (isIOS) {
-      logger.i('iOS: Using custom font directory solution for Chinese subtitles');
-    } else {
-      logger.i('Android: Using libassAndroidFont configuration');
-    }
-
     // iOS-specific post-initialization optimizations
     if (isIOS) {
       // Optimize audio device selection for iOS after player creation
@@ -86,11 +77,7 @@ class ThembyController{
   /// and configures MPV to use it via the sub-fonts-dir property.
   /// This approach bypasses iOS 18+ system font access restrictions.
   void _setupIOSFontDirectory(Player player) async {
-    final logger = ThembyLogger();
-
     try {
-      logger.d('Setting up iOS font directory for libass');
-
       // Extract font to accessible directory
       final String fontsDirPath = await getLibassFontsDir();
 
@@ -101,12 +88,9 @@ class ThembyController{
         // Configure MPV to use our custom font directory for libass
         await nativePlayer.setProperty('sub-fonts-dir', fontsDirPath);
         await nativePlayer.setProperty('sub-font', 'Noto Sans SC');
-
-        logger.i('Successfully configured iOS font directory: $fontsDirPath');
-      } else {
-        logger.w('Player platform is not NativePlayer, cannot set sub-fonts-dir');
       }
     } catch (e, stackTrace) {
+      final logger = ThembyLogger();
       logger.e('Failed to set up iOS font directory', error: e, stackTrace: stackTrace);
     }
   }
