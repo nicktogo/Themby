@@ -8,6 +8,7 @@ class Constant{
   static const doubleClickToJumpKey = 'doubleClickToJump';
   static const longPressSpeedKey = "longPressSpeed";
   static const horizontalSwipeSeekKey = "horizontalSwipeSeek";
+  static const verticalSwipeVolumeAndBrightnessKey = "verticalSwipeVolumeAndBrightness";
   static const mpvHardDecodingKey = "mpvHardDecoding";
   static const mpvBufferSizeKey = "bufferSize";
   static const fastForwardTimeKey = "fastForwardTime";

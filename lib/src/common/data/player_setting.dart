@@ -33,6 +33,10 @@ class PlayerSetting{
   set horizontalSwipeSeek(bool value) => prefs.setBool(Constant.horizontalSwipeSeekKey, value);
 
 
+  bool get verticalSwipeVolumeAndBrightness => prefs.getBool(Constant.verticalSwipeVolumeAndBrightnessKey) ?? true;
+  set verticalSwipeVolumeAndBrightness(bool value) => prefs.setBool(Constant.verticalSwipeVolumeAndBrightnessKey, value);
+
+
   bool get mpvHardDecoding => prefs.getBool(Constant.mpvHardDecodingKey) ?? true;
   set mpvHardDecoding(bool value) => prefs.setBool(Constant.mpvHardDecodingKey, value);
 

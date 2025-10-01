@@ -134,6 +134,9 @@ class _HorizontalScreenGestures extends ConsumerState<HorizontalScreenGestures>{
       },
       onVerticalDragStart: (details) async {
         if (lock) return;
+        if(!ref.read(playerSettingProvider).verticalSwipeVolumeAndBrightness){
+          return;
+        }
         final dy = details.globalPosition.dy;
         // 开始位置必须是中间2/4的位置
         if (dy < height * 0.25 || dy > height * 0.75) {
@@ -143,10 +146,16 @@ class _HorizontalScreenGestures extends ConsumerState<HorizontalScreenGestures>{
       },
       onVerticalDragUpdate: (details) async {
         if (lock) return;
+        if(!ref.read(playerSettingProvider).verticalSwipeVolumeAndBrightness){
+          return;
+        }
         ref.read(volumeBrightnessServiceProvider.notifier).onVerticalDragUpdate(details, height);
       },
       onVerticalDragEnd: (details) async{
         if (lock) return;
+        if(!ref.read(playerSettingProvider).verticalSwipeVolumeAndBrightness){
+          return;
+        }
         ref.read(volumeBrightnessServiceProvider.notifier).onVerticalDragEnd(details);
       },
       /// 横向滑动开始

@@ -129,8 +129,8 @@ dependencies:
 
   logger: ^2.4.0
 
-#  #屏幕亮度
-#  screen_brightness: ^1.0.1
+  #屏幕亮度
+  screen_brightness: ^2.1.7
 
 dev_dependencies:
   flutter_test:

@@ -41,12 +41,19 @@ class SettingPlayerScreen extends ConsumerWidget{
             ),
             SettingItem(
               leading: const Icon(Icons.swipe_vertical),
-                title: const Text("滑动手势"),
-                subtitle: const Text("垂直滑动调整音量和亮度, 待做..."),
-                trailing: Switch(
-                  value: true,
-                  onChanged: (value) {},
-                )
+              title: const Text("滑动手势"),
+              subtitle: const Text("垂直滑动调整音量和亮度"),
+              trailing: Switch(
+                value: ref.watch(playerSettingProvider).verticalSwipeVolumeAndBrightness,
+                onChanged: (value) {
+                  ref.read(playerSettingProvider).verticalSwipeVolumeAndBrightness = value;
+                  ref.refresh(playerSettingProvider);
+                },
+              ),
+              onTap: () {
+                ref.read(playerSettingProvider).verticalSwipeVolumeAndBrightness = !ref.read(playerSettingProvider).verticalSwipeVolumeAndBrightness;
+                ref.refresh(playerSettingProvider);
+              },
             ),
             SettingItem(
                 leading: const Icon(Icons.ads_click),
