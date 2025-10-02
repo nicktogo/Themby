@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
@@ -19,6 +22,17 @@ void main() async {
 
   // Initialize MediaKit for video playback
   MediaKit.ensureInitialized();
+
+  // Configure FlutterVolumeController audio session for iOS silent mode
+  if (Platform.isIOS) {
+    try {
+      await FlutterVolumeController.setIOSAudioSessionCategory(
+        category: AudioSessionCategory.playback,
+      );
+    } catch (e) {
+      debugPrint('Failed to set iOS audio session category: $e');
+    }
+  }
 
   final prefs = await SharedPreferences.getInstance();
   final directory = await getApplicationDocumentsDirectory();

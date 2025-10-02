@@ -116,18 +116,6 @@ class VolumeBrightnessService extends _$VolumeBrightnessService {
 
     _resetState();
 
-
-    // Note: Fallback solution for iOS silent mode issue (kept for future reference)
-    // The AVAudioSession is now configured in AppDelegate.swift to use .playback category.
-    // If needed in the future, we can explicitly set it here on each drag start:
-    // try {
-    //   await FlutterVolumeController.setIOSAudioSessionCategory(
-    //     category: AudioSessionCategory.playback,
-    //   );
-    // } catch (e) {
-    //   // Silently handle non-iOS platforms
-    // }
-
     // Determine drag type based on horizontal position
     final isLeftSide = details.globalPosition.dx < width * 0.5;
 
