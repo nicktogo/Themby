@@ -63,6 +63,12 @@ class App extends ConsumerWidget{
             onInverseSurface: Colors.grey.shade100,
         ),
         useMaterial3: true,
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          },
+        ),
       ),
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
@@ -72,6 +78,12 @@ class App extends ConsumerWidget{
             onInverseSurface: Colors.black26,
         ),
         useMaterial3: true,
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          },
+        ),
       ),
       themeMode: [
         ThemeMode.light,
