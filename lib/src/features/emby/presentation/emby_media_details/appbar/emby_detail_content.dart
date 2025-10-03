@@ -2,8 +2,10 @@
 
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:themby/src/features/emby/application/emby_common_service.dart';
 import 'package:themby/src/features/emby/domain/emby/item.dart';
+import 'package:themby/src/router/app_router.dart';
 
 class EmbyDetailContent extends StatelessWidget{
   const EmbyDetailContent({super.key, required this.item});
@@ -15,7 +17,7 @@ class EmbyDetailContent extends StatelessWidget{
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if(item.type == "Episode")
+        if(item.type == "Episode") ...[
           Padding(
             padding: const EdgeInsets.only(left: 12,bottom: 10),
             child: Text(
@@ -25,6 +27,85 @@ class EmbyDetailContent extends StatelessWidget{
                 style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold)
             ),
           ),
+          if(item.seriesName != null)
+            Padding(
+              padding: const EdgeInsets.only(left: 12, bottom: 10),
+              child: Row(
+                children: [
+                  // 跳转到剧集系列
+                  if(item.seriesId != null)
+                    InkWell(
+                      onTap: () {
+                        context.pushNamed(
+                          AppRoute.details.name,
+                          pathParameters: {'id': item.seriesId!},
+                        );
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.live_tv,
+                            size: 14,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '剧集: ${item.seriesName!}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                  // 分隔符
+                  if(item.seriesId != null && item.seasonId != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        '/',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
+                        ),
+                      ),
+                    ),
+
+                  // 跳转到季
+                  if(item.seasonId != null)
+                    InkWell(
+                      onTap: () {
+                        context.pushNamed(
+                          AppRoute.season.name,
+                          pathParameters: {'id': item.seasonId!},
+                        );
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.video_library,
+                            size: 14,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '第${item.parentIndexNumber}季',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
+            ),
+        ],
 
         _labelContent(item),
 
