@@ -7,7 +7,7 @@ part of 'volume_brightness_service.dart';
 // **************************************************************************
 
 String _$volumeBrightnessServiceHash() =>
-    r'5cf5abc03384f73d7dee6af8773f22292d84a76f';
+    r'7bc538d8e5daec9f2b464f3783c628d399d560c2';
 
 /// See also [VolumeBrightnessService].
 @ProviderFor(VolumeBrightnessService)

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:media_kit/media_kit.dart';
@@ -19,6 +20,13 @@ import 'objectbox.g.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // 强制重置系统UI模式，确保App总是以正确的状态启动
+  // 这样可以避免上次运行时的沉浸模式状态污染整个App
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.edgeToEdge,
+    overlays: SystemUiOverlay.values, // 显示所有系统UI
+  );
 
   // Initialize MediaKit for video playback
   MediaKit.ensureInitialized();
