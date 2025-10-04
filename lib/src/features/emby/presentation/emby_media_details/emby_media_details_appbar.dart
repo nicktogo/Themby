@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:themby/src/common/constants.dart';
@@ -34,7 +35,7 @@ class DetailAppBar extends ConsumerWidget {
           expandedHeight: heightBar - MediaQuery.of(context).padding.top,
           pinned: true,
           centerTitle: true,
-          iconTheme: const IconThemeData(color: Colors.white),
+          iconTheme: const IconThemeData(color: CupertinoColors.white),
           title: StreamBuilder(
             stream: titleStreamC.stream,
             initialData: false,
@@ -88,7 +89,7 @@ class DetailBackground extends StatelessWidget {
                 stops: const [0, 1],
                 colors: [
                   const Color.fromRGBO(0, 0, 0, 0),
-                  Theme.of(context).scaffoldBackgroundColor
+                  CupertinoTheme.of(context).scaffoldBackgroundColor
                 ]
             ).createShader(bounds);
           },

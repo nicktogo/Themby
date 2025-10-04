@@ -7,8 +7,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Essential Flutter Commands
 ```bash
 flutter run                    # Run in debug mode
-flutter build apk             # Build Android APK
-flutter build appbundle       # Build Android App Bundle
+flutter build ios --release   # Build iOS release (primary platform)
+flutter build ipa             # Build iOS app archive
 flutter analyze               # Static analysis
 flutter pub get               # Install dependencies
 flutter clean && flutter pub get  # Clean rebuild dependencies
@@ -62,17 +62,18 @@ lib/src/features/
 - Custom transition animations for different route types
 
 ### Media Architecture
-- **Player**: Media Kit with MPV backend (Android-focused)
+- **Player**: Media Kit with MPV backend
 - **Networking**: Dio with `dio_cache_interceptor` for API caching
 - **Images**: `cached_network_image` with custom network layer
 - **Emby Integration**: Domain models with JSON serialization
 
 ### UI/Theme System
-- Material 3 with dynamic color schemes
-- Custom color selection via `colorType` array
-- Theme mode support (light/dark/system)
-- Custom dialog system replacing default Flutter dialogs
-- Android-specific UI optimizations (edge-to-edge, high refresh rate)
+- **Primary Platform**: iOS with Cupertino design language
+- **Design System**: Cupertino widgets (CupertinoApp, CupertinoNavigationBar, CupertinoButton, etc.)
+- **Navigation**: CupertinoTabScaffold for bottom tab navigation
+- **Dialogs**: CupertinoAlertDialog and CupertinoActionSheet for native iOS feel
+- **Theme Support**: Light/dark mode with CupertinoThemeData
+- **Transitions**: Native iOS page transitions and gestures (swipe-to-go-back)
 
 ## Key Development Patterns
 
@@ -99,17 +100,32 @@ class FeatureService extends _$FeatureService {
 
 ## Platform Specifics
 
-### Android Focus
-- Primary target platform with optimizations:
-  - High refresh rate display support
-  - Edge-to-edge UI with transparent system bars
-  - Hardware acceleration for video playback
-  - Custom splash screen configuration
+### iOS Focus (Primary Platform)
+- Native iOS design with Cupertino widgets
+- iOS-specific optimizations:
+  - Swipe-to-go-back navigation gestures
+  - Native iOS status bar handling
+  - CupertinoTabBar for bottom navigation
+  - CupertinoNavigationBar with iOS-style transitions
+  - Preferred frame rates for smooth video playback
+  - iOS-native dialogs and action sheets
+
+### Widget Migration Guide
+When working with UI code, follow these Cupertino equivalents:
+- `Scaffold` → `CupertinoPageScaffold`
+- `AppBar` → `CupertinoNavigationBar`
+- `FloatingActionButton` → `CupertinoButton.filled`
+- `ElevatedButton/TextButton` → `CupertinoButton`
+- `AlertDialog` → `CupertinoAlertDialog`
+- `PopupMenuButton` → `CupertinoActionSheet`
+- `NavigationBar` → `CupertinoTabBar`
+- `RefreshIndicator` → `CupertinoSliverRefreshControl`
+- Material Icons → `CupertinoIcons`
 
 ### Dependencies Note
 - Uses specific versions of media_kit libraries for stability
 - ObjectBox requires platform-specific setup
-- Some packages have Android-only functionality
+- flutter_smart_dialog adapted for Cupertino design
 
 ## Code Generation Workflow
 1. Modify provider/entity/serializable class

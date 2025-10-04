@@ -1,6 +1,6 @@
 
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_router/go_router.dart';
@@ -32,7 +32,7 @@ class PlayButton extends ConsumerWidget{
         margin: const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(26),
-          color: Theme.of(context).colorScheme.primary,
+          color: CupertinoTheme.of(context).primaryColor,
         ),
         constraints: const BoxConstraints(
           minWidth: 300,
@@ -53,11 +53,11 @@ class PlayButton extends ConsumerWidget{
   //   return Row(
   //     mainAxisAlignment: MainAxisAlignment.center,
   //     children: [
-  //       Icon(Icons.play_arrow_rounded , color: Theme.of(context).colorScheme.onPrimary),
+  //       Icon(CupertinoIcons.play_arrow_solid , color: CupertinoTheme.of(context).primaryContrastingColor),
   //       const SizedBox(width: 10),
   //       (item.userData?.playedPercentage != null && item.type != 'Series')  ?
-  //       Text('继续播放 ${durationToTime(Duration(milliseconds: item.userData!.playbackPositionTicks!  ~/ 10000))}', style: StyleString.titleStyle.copyWith(color: Theme.of(context).colorScheme.onPrimary))
-  //           : Text('播放', style: StyleString.titleStyle.copyWith(color: Theme.of(context).colorScheme.onPrimary)),
+  //       Text('继续播放 ${durationToTime(Duration(milliseconds: item.userData!.playbackPositionTicks!  ~/ 10000))}', style: StyleString.titleStyle.copyWith(color: CupertinoTheme.of(context).primaryContrastingColor))
+  //           : Text('播放', style: StyleString.titleStyle.copyWith(color: CupertinoTheme.of(context).primaryContrastingColor)),
   //     ],
   //   );
   // }
@@ -73,9 +73,9 @@ class PlayButton extends ConsumerWidget{
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(Icons.play_arrow_rounded , size: 28, color: Theme.of(context).colorScheme.onPrimary),
+        Icon(CupertinoIcons.play_arrow_solid , size: 28, color: CupertinoColors.white),
         const SizedBox(width: 5),
-        Text("播放",style: StyleString.titleStyle.copyWith(color: Theme.of(context).colorScheme.onPrimary)),
+        Text("播放",style: StyleString.titleStyle.copyWith(color: CupertinoColors.white)),
       ],
     );
 
@@ -85,7 +85,7 @@ class PlayButton extends ConsumerWidget{
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(Icons.play_arrow_rounded , size: 28, color: Theme.of(context).colorScheme.onPrimary),
+        Icon(CupertinoIcons.play_arrow_solid , size: 28, color: CupertinoColors.white),
         const SizedBox(width: 10),
         // SizedBox(
         //   width: width * 0.3,
@@ -93,14 +93,14 @@ class PlayButton extends ConsumerWidget{
         //     value: percentage,
         //     borderRadius: StyleString.lgRadius,
         //     minHeight: 5,
-        //     backgroundColor: Theme.of(context).colorScheme.onPrimary,
-        //     valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primaryFixedDim),
+        //     backgroundColor: CupertinoColors.white,
+        //     valueColor: AlwaysStoppedAnimation<Color>(CupertinoTheme.of(context).primaryColor),
         //   ),
         // ),
         // const SizedBox(width: 10),
 
         // const SizedBox(width: 10),
-        Text("剩 $text",style: StyleString.titleStyle.copyWith(color: Theme.of(context).colorScheme.onPrimary,height: 1,),),
+        Text("剩 $text",style: StyleString.titleStyle.copyWith(color: CupertinoColors.white,height: 1,),),
       ],
     );
   }

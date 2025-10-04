@@ -1,6 +1,6 @@
 
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:themby/src/common/constants.dart';
@@ -11,7 +11,7 @@ import 'package:themby/src/features/player/constants.dart';
 import 'package:themby/src/features/player/service/controls_service.dart';
 
 class ToggleSubtitleButton extends ConsumerWidget{
-  const ToggleSubtitleButton({super.key, this.size = 28, this.color = Colors.white});
+  const ToggleSubtitleButton({super.key, this.size = 28, this.color = CupertinoColors.white});
 
   final double size;
   final Color color;
@@ -20,9 +20,11 @@ class ToggleSubtitleButton extends ConsumerWidget{
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    return IconButton(
-        icon: Icon(
-          Icons.subtitles_outlined,
+    return CupertinoButton(
+        padding: EdgeInsets.zero,
+        minSize: 44,
+        child: Icon(
+          CupertinoIcons.textbox,
           size: size,
           color: color,
         ),
@@ -47,7 +49,7 @@ Widget _audioSheet(){
 
     return Container(
       width: 250,
-      color: Colors.black.withOpacity(0.85),
+      color: CupertinoColors.black.withOpacity(0.85),
       child: resp.when(
         data: (data)  {
           List<Select> audioStreams = getMediaStreams(data.mediaSources![0].mediaStreams!,'Subtitle');
@@ -59,14 +61,20 @@ Widget _audioSheet(){
               return Container(
                 margin: const EdgeInsets.only(bottom: 5),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey), // Set the border color
-                  borderRadius: BorderRadius.circular(12), // Optional: Add border radius
+                  border: Border.all(color: CupertinoColors.systemGrey),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                child: ListTile(
-                  textColor: Colors.white,
-                  titleTextStyle: StyleString.subtitleStyle,
-                  title: Text(audioStreams[index].title),
-                  subtitle: Text(audioStreams[index].subtitle ?? ''),
+                child: CupertinoListTile(
+                  title: Text(
+                    audioStreams[index].title,
+                    style: StyleString.subtitleStyle.copyWith(color: CupertinoColors.white),
+                  ),
+                  subtitle: audioStreams[index].subtitle != null
+                      ? Text(
+                          audioStreams[index].subtitle!,
+                          style: const TextStyle(color: CupertinoColors.white),
+                        )
+                      : null,
                   onTap: () async {
                     ref.read(controlsServiceProvider.notifier).toggleSubtitle(int.parse(audioStreams[index].value));
                     SmartDialog.dismiss(tag: TagsString.subtitleSheetDialog);
@@ -74,10 +82,10 @@ Widget _audioSheet(){
                 ),
               );
             },
-          ) : const Center(child: Text('没有可选的', style: TextStyle(color: Colors.white)));
+          ) : const Center(child: Text('没有可选的', style: TextStyle(color: CupertinoColors.white)));
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error,_) => const Center(child: Text('空')),
+        loading: () => const Center(child: CupertinoActivityIndicator()),
+        error: (error,_) => const Center(child: Text('空', style: TextStyle(color: CupertinoColors.white))),
       ),
     );
   });

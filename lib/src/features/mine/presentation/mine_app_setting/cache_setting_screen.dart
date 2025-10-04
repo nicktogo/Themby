@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:themby/src/common/data/cache_setting.dart';
 import 'package:themby/src/features/mine/widgets/setting_item.dart';
@@ -10,20 +10,19 @@ class CacheSettingScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final sizeFuture = ref.watch(cacheSettingProvider).getCacheSize();
 
-    return Scaffold(
-      appBar: AppBar(
-        titleSpacing: 0.0,
-        title: const Text("缓存管理"),
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text("缓存管理"),
       ),
-      body: SingleChildScrollView(
-        child: Column(
+      child: SafeArea(
+        child: ListView(
           children: [
             FutureBuilder<String>(
               future: sizeFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return SettingItem(
-                    leading: const Icon(Icons.cleaning_services_rounded),
+                    leading: const Icon(CupertinoIcons.clear),
                     title: const Text("清除图片缓存"),
                     subtitle: const Text("加载中..."),
                     onTap: (){
@@ -32,7 +31,7 @@ class CacheSettingScreen extends ConsumerWidget {
                   );
                 } else if (snapshot.hasError) {
                   return SettingItem(
-                    leading: const Icon(Icons.cleaning_services_rounded),
+                    leading: const Icon(CupertinoIcons.clear),
                     title: const Text("清除图片缓存"),
                     subtitle: const Text("加载失败"),
                     onTap: (){
@@ -40,7 +39,7 @@ class CacheSettingScreen extends ConsumerWidget {
                   );
                 } else {
                   return SettingItem(
-                    leading: const Icon(Icons.cleaning_services_rounded),
+                    leading: const Icon(CupertinoIcons.clear),
                     title: const Text("清除图片缓存"),
                     subtitle: Text(snapshot.data ?? "未知大小"),
                     onTap: () async{

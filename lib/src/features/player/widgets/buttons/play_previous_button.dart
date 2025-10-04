@@ -1,11 +1,11 @@
 
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:themby/src/features/player/service/controls_service.dart';
 
 class PlayPreviousButton extends ConsumerWidget{
-  const PlayPreviousButton({super.key, this.size = 30, this.color = Colors.white});
+  const PlayPreviousButton({super.key, this.size = 30, this.color = CupertinoColors.white});
 
   final double size;
   final Color color;
@@ -14,9 +14,11 @@ class PlayPreviousButton extends ConsumerWidget{
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    return IconButton(
-        icon: Icon(
-          Icons.skip_previous_rounded,
+    return CupertinoButton(
+        padding: EdgeInsets.zero,
+        minSize: 44,
+        child: Icon(
+          CupertinoIcons.backward_end_fill,
           size: size,
           color: color,
         ),

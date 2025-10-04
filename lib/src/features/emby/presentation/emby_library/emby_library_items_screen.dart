@@ -1,6 +1,6 @@
 
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:themby/src/common/constants.dart';
 import 'package:themby/src/features/emby/data/view_repository.dart';
@@ -37,52 +37,51 @@ class EmbyLibraryItemsScreen extends ConsumerWidget{
 
     final totalRecordCount = response.valueOrNull?.totalRecordCount;
 
-    return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: () async {
-          ref.invalidate(getItemProvider);
-          ref.read(getItemProvider(
-              itemQuery: (
-              page: 0,
-              parentId: parentId,
-              genreIds: genreIds ?? '',
-              includeItemTypes: itemQuery.includeItemTypes,
-              sortBy: itemQuery.sortBy,
-              sortOrder: itemQuery.sortOrder,
-              filters: filter,
-              )).future);
-        },
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              centerTitle: true,
-              title: Text(title,style:Theme.of(context).textTheme.titleMedium),
-              floating: true,
-              snap: true,
-              pinned: true,
-              scrolledUnderElevation: 0.0,
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(38.0),
-                child: Container(
-                  margin: const EdgeInsets.only(top: 6,bottom: 12),
-                  padding: const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("${totalRecordCount ?? 0 } 项"),
-                      const SortButton(),
-                    ],
+    return CupertinoPageScaffold(
+      child: CustomScrollView(
+        slivers: [
+          CupertinoSliverRefreshControl(
+            onRefresh: () async {
+              ref.invalidate(getItemProvider);
+              await ref.read(getItemProvider(
+                  itemQuery: (
+                  page: 0,
+                  parentId: parentId,
+                  genreIds: genreIds ?? '',
+                  includeItemTypes: itemQuery.includeItemTypes,
+                  sortBy: itemQuery.sortBy,
+                  sortOrder: itemQuery.sortOrder,
+                  filters: filter,
+                  )).future);
+            },
+          ),
+          CupertinoSliverNavigationBar(
+            largeTitle: Text(title),
+            trailing: const SortButton(),
+            border: null,
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              margin: const EdgeInsets.only(top: 6, bottom: 12),
+              padding: const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "${totalRecordCount ?? 0} 项",
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: CupertinoColors.secondaryLabel,
+                    ),
                   ),
-                ),
+                  const SizedBox.shrink(),
+                ],
               ),
             ),
-
-            LibraryGridItems(parentId: parentId, filter: filter, genreIds: genreIds),
-          ],
-        ),
+          ),
+          LibraryGridItems(parentId: parentId, filter: filter, genreIds: genreIds),
+        ],
       ),
     );
   }

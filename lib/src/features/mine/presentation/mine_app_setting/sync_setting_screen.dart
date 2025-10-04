@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -14,21 +15,20 @@ class SyncSettingScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('同步设置'),
-        titleSpacing: 0.0,
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text('同步设置'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
+      child: SafeArea(
+        child: ListView(
           children: [
             const LabelText(text: "webdav 配置", subtitle: "同步站点配置"),
 
             SettingItem(
-              leading: const Icon(Icons.sync),
+              leading: const Icon(CupertinoIcons.arrow_2_circlepath),
               title: const Text("开启站点同步"),
               subtitle: const Text("webdav"),
-              trailing: Switch(
+              trailing: CupertinoSwitch(
                 value: ref.watch(syncSettingProvider).enableSync,
                 onChanged: (value) {
                   ref.read(syncSettingProvider).enableSync = value;
@@ -41,7 +41,7 @@ class SyncSettingScreen extends ConsumerWidget {
               },
             ),
             SettingItem(
-              leading: const Icon(Icons.cloud_outlined),
+              leading: const Icon(CupertinoIcons.cloud),
               title: const Text("WebDav 配置"),
               subtitle: const Text("配置"),
               onTap: () {
@@ -55,10 +55,10 @@ class SyncSettingScreen extends ConsumerWidget {
             ),
 
             SettingItem(
-              leading: const Icon(Icons.format_color_text_outlined),
+              leading: const Icon(CupertinoIcons.textformat),
               title: const Text("自动同步"),
               subtitle: const Text("启动应用时，自动同步一次"),
-              trailing: Switch(
+              trailing: CupertinoSwitch(
                 value: ref.watch(syncSettingProvider).autoSync,
                 onChanged: (value) {
                   ref.read(syncSettingProvider).autoSync = value;
@@ -75,14 +75,7 @@ class SyncSettingScreen extends ConsumerWidget {
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
               width: double.infinity,
-              child: MaterialButton(
-                height: 50,
-                elevation: 0,
-                color: Theme.of(context).colorScheme.primary,
-                textColor: Theme.of(context).colorScheme.onPrimary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: StyleString.lgRadius,
-                ),
+              child: CupertinoButton.filled(
                 child: const Text('开始同步'),
                 onPressed: () async{
                   bool result = await ref.read(syncSiteProvider.future);

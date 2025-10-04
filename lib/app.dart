@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
@@ -8,7 +9,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:themby/src/common/data/app_setting_repository.dart';
-import 'package:themby/src/common/domiani/color_type.dart';
 import 'package:themby/src/common/widget/custom_dialog.dart';
 import 'package:themby/src/router/app_router.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -52,44 +52,38 @@ class App extends ConsumerWidget{
 
     ref.watch(appStartupProvider);
 
-    return MaterialApp.router(
+    final themeMode = [
+      ThemeMode.light,
+      ThemeMode.dark,
+      ThemeMode.system,
+    ][ref.watch(appSettingRepositoryProvider).themeMode];
+
+    // Determine brightness based on theme mode
+    Brightness brightness;
+    if (themeMode == ThemeMode.system) {
+      brightness = MediaQueryData.fromView(View.of(context)).platformBrightness;
+    } else {
+      brightness = themeMode == ThemeMode.dark ? Brightness.dark : Brightness.light;
+    }
+
+    return CupertinoApp.router(
       routerConfig: ref.watch(goRouterProvider),
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: colorType[ref.watch(appSettingRepositoryProvider).customColor],
-            brightness: Brightness.light,
-            inverseSurface: Colors.grey.shade200,
-            onInverseSurface: Colors.grey.shade100,
-        ),
-        useMaterial3: true,
-        pageTransitionsTheme: const PageTransitionsTheme(
-          builders: {
-            TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
-            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-          },
-        ),
-      ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: colorType[ref.watch(appSettingRepositoryProvider).customColor],
-            brightness: Brightness.dark,
-            inverseSurface: Colors.black87,
-            onInverseSurface: Colors.black26,
-        ),
-        useMaterial3: true,
-        pageTransitionsTheme: const PageTransitionsTheme(
-          builders: {
-            TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
-            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-          },
+      theme: CupertinoThemeData(
+        brightness: brightness,
+        primaryColor: CupertinoColors.activeBlue,
+        scaffoldBackgroundColor: brightness == Brightness.dark
+            ? CupertinoColors.black
+            : CupertinoColors.systemBackground,
+        barBackgroundColor: brightness == Brightness.dark
+            ? CupertinoColors.darkBackgroundGray
+            : CupertinoColors.systemBackground,
+        textTheme: CupertinoTextThemeData(
+          primaryColor: brightness == Brightness.dark
+              ? CupertinoColors.white
+              : CupertinoColors.black,
         ),
       ),
-      themeMode: [
-        ThemeMode.light,
-        ThemeMode.dark,
-        ThemeMode.system,
-      ][ref.watch(appSettingRepositoryProvider).themeMode],
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

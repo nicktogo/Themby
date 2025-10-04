@@ -1,7 +1,7 @@
 
 import 'dart:ffi';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:themby/src/common/constants.dart';
@@ -14,18 +14,16 @@ class AboutScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    Color color = Theme.of(context).colorScheme.surfaceContainerHigh;
-
-    return Scaffold(
-      appBar: AppBar(
-        titleSpacing: 0.0,
-        title: const Text('About'),
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text('About'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children:  [
+      child: SafeArea(
+        child: ListView(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
             const SizedBox(height: 12),
             Image.asset(
               'assets/images/logo_splash.png',
@@ -44,16 +42,14 @@ class AboutScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 12),
             _aboutItem(
-              color,
-              const Icon(Icons.sync),
+              const Icon(CupertinoIcons.arrow_2_circlepath),
               "检查应用更新",
               (){
                 SmartDialog.showToast("待完善");
               }
             ),
             _aboutItem(
-                color,
-                const Icon(Icons.star),
+                const Icon(CupertinoIcons.star),
                 "Github",
                  (){
                     launchUrl(
@@ -63,8 +59,7 @@ class AboutScreen extends ConsumerWidget {
                  }
             ),
             _aboutItem(
-                color,
-                const Icon(Icons.telegram_outlined),
+                const Icon(CupertinoIcons.chat_bubble),
                 "Telegram 频道",
                  (){
                    launchUrl(
@@ -74,25 +69,25 @@ class AboutScreen extends ConsumerWidget {
                  }
             ),
             _aboutItem(
-                color,
-                const Icon(Icons.local_police_outlined),
+                const Icon(CupertinoIcons.square_list),
                 "依赖库",
                  (){
                    SmartDialog.showToast("待完善");
                  }
             ),
             _aboutItem(
-                color,
-                const Icon(Icons.info_outline_rounded),
+                const Icon(CupertinoIcons.question_circle),
                 "常见问题",
                  (){
                    SmartDialog.showToast("待完善");
                  }
             ),
             const SizedBox(height: 5),
-            Text(
+            const Text(
               "第三方emby客户端",
-              style: StyleString.subtitleStyle.copyWith(color: Colors.grey),
+              style: TextStyle(fontSize: 14, color: CupertinoColors.systemGrey),
+            ),
+              ],
             ),
           ],
         ),
@@ -100,18 +95,26 @@ class AboutScreen extends ConsumerWidget {
     );
   }
 
-  Widget _aboutItem(Color color, Icon icon, String text, VoidCallback onTap) {
+  Widget _aboutItem(Icon icon, String text, VoidCallback onTap) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      child: Material(
-        color: color,
-        borderRadius: const BorderRadius.all(Radius.circular(18)),
-        child: InkWell(
-          borderRadius: const BorderRadius.all(Radius.circular(18)),
-          onTap: onTap,
-          child: ListTile(
-            leading: icon,
-            title: Text(text),
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      child: CupertinoButton(
+        padding: EdgeInsets.zero,
+        onPressed: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            color: CupertinoColors.systemGrey6,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              icon,
+              const SizedBox(width: 12),
+              Text(text, style: const TextStyle(fontSize: 16)),
+              const Spacer(),
+              const Icon(CupertinoIcons.chevron_right, size: 20),
+            ],
           ),
         ),
       ),

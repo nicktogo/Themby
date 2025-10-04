@@ -1,6 +1,6 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:themby/src/common/widget/network_img_layer.dart';
@@ -33,9 +33,10 @@ class TitleLogo extends ConsumerWidget{
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            IconButton(
-              icon: const Icon(Icons.arrow_back,color: Colors.white),
-              padding:  EdgeInsets.zero,
+            CupertinoButton(
+              padding: EdgeInsets.zero,
+              minSize: 44,
+              child: const Icon(CupertinoIcons.back, color: CupertinoColors.white),
               onPressed: (){
                 Navigator.pop(context);
               },
@@ -58,7 +59,7 @@ class TitleLogo extends ConsumerWidget{
                         truncateText(value.seriesName ?? value.name ?? '', 10),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: CupertinoColors.white),
                       ),),
                 ),
                 const SizedBox(height: 3),
@@ -68,7 +69,7 @@ class TitleLogo extends ConsumerWidget{
                         'S${value.parentIndexNumber}E${value.indexNumber} - ${value.name}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(color: Colors.white,fontSize: 12)
+                        style: const TextStyle(color: CupertinoColors.white,fontSize: 12)
                     ),
                   ),
               ],

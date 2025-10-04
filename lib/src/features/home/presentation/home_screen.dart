@@ -1,4 +1,5 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -24,40 +25,59 @@ class HomeScreen extends ConsumerWidget {
 
     final String query = ref.watch(homeSearchQueryNotifierProvider);
 
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          ref.read(homeServerNotifierProvider.notifier).openAddDialog();
-        },
-        child: const Icon(Icons.add),
-      ),
-      appBar: AppBar(
-        title: Text('连接'.hardcoded, style: StyleString.headerStyle.copyWith(fontSize: 30)),
-        actions: [
-          const SyncButton(),
-          IconButton(
-            icon: const Icon(Icons.settings_outlined),
-            onPressed: () {
-              GoRouter.of(context).push('/mine');
-            },
-          ),
-        ],
-      ),
-      body:  Column(
-        children: [
-          const SizedBox(height: 10),
-          const HomeSearch(),
-          const SizedBox(height: 10),
-
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: () async {
-                ref.refresh(finaAllByTextProvider(text: query));
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text('连接'.hardcoded),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SyncButton(),
+            CupertinoButton(
+              padding: EdgeInsets.zero,
+              child: const Icon(CupertinoIcons.settings),
+              onPressed: () {
+                GoRouter.of(context).push('/mine');
               },
-              child: const ServerList(),
             ),
-          ),
-        ],
+          ],
+        ),
+      ),
+      child: SafeArea(
+        child: Column(
+          children: [
+            const SizedBox(height: 10),
+            const HomeSearch(),
+            const SizedBox(height: 10),
+            Expanded(
+              child: CustomScrollView(
+                slivers: [
+                  CupertinoSliverRefreshControl(
+                    onRefresh: () async {
+                      ref.refresh(finaAllByTextProvider(text: query));
+                    },
+                  ),
+                  const ServerList(),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: CupertinoButton.filled(
+                onPressed: () {
+                  ref.read(homeServerNotifierProvider.notifier).openAddDialog();
+                },
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(CupertinoIcons.add, color: CupertinoColors.white),
+                    SizedBox(width: 8),
+                    Text('Add Server', style: TextStyle(color: CupertinoColors.white)),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -73,89 +93,115 @@ class ServerList extends ConsumerWidget {
 
     final sites = ref.watch(finaAllByTextProvider(text: query));
 
-    final Color surfaceColor = Theme.of(context).colorScheme.surface;
-
-    return ListView.builder(
-      // key: ValueKey(query),
-      itemCount: sites.valueOrNull?.length ?? 0,
+    return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
-      itemBuilder: (context, index) {
-        return sites.when(
-            error:  (error, stack) {
-              return const Center(child: Text('Error'));
-            },
-            loading: () {
-              return const SizedBox();
-            },
-            data: (data) {
-              return Card(
-                clipBehavior: Clip.antiAlias,
-                elevation: 0,
-                child: ListTile(
-                  contentPadding: const EdgeInsets.only(right: 8, left: 16),
-                  dense: true,
-                  leading: SvgPicture.asset('assets/emby.svg', width: 36, height: 36),
-                  title: Text(
-                    (data[index].remake?.isNotEmpty == true ? data[index].remake : data[index].serverName)!,
-                    style: const TextStyle(fontWeight: FontWeight.w500),
+      sliver: sites.when(
+        error: (error, stack) {
+          return const SliverToBoxAdapter(
+            child: Center(child: Text('Error')),
+          );
+        },
+        loading: () {
+          return const SliverToBoxAdapter(
+            child: Center(child: CupertinoActivityIndicator()),
+          );
+        },
+        data: (data) {
+          return SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  decoration: BoxDecoration(
+                    color: CupertinoColors.systemGrey6,
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  subtitle: Text(data[index].username!, style: const TextStyle(fontWeight: FontWeight.w300)),
-                  trailing: _menuButton(
-                          () {
-                            SmartDialog.show(
-                                alignment: Alignment.centerRight,
-                                builder: (_) {
-                                  return HomeServerEdit(site: data[index]);
-                                }
-                            );
-                      }, () {
-                            ref.read(homeServerNotifierProvider.notifier).removeSite(data[index]);
+                  child: CupertinoListTile(
+                    padding: const EdgeInsets.only(right: 8, left: 16, top: 8, bottom: 8),
+                    leading: SvgPicture.asset('assets/emby.svg', width: 36, height: 36),
+                    title: Text(
+                      (data[index].remake?.isNotEmpty == true ? data[index].remake : data[index].serverName)!,
+                      style: const TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    subtitle: Text(data[index].username!, style: const TextStyle(fontWeight: FontWeight.w300)),
+                    trailing: _menuButton(
+                      context,
+                      () {
+                        SmartDialog.show(
+                          alignment: Alignment.centerRight,
+                          builder: (_) {
+                            return HomeServerEdit(site: data[index]);
+                          },
+                        );
                       },
-                      surfaceColor
+                      () {
+                        ref.read(homeServerNotifierProvider.notifier).removeSite(data[index]);
+                      },
+                    ),
+                    onTap: () async {
+                      ref.read(embyStateServiceProvider.notifier).updateSite(data[index]);
+                      ref.read(embyStateServiceProvider.notifier).addUserIdToToken(data[index].userId!);
+                      GoRouter.of(context).go('/emby');
+                    },
                   ),
-                  onTap: () async {
-                    ref.read(embyStateServiceProvider.notifier).updateSite(data[index]);
-                    ref.read(embyStateServiceProvider.notifier).addUserIdToToken(data[index].userId!);
-                    GoRouter.of(context).go('/emby');
-                  },
-                ),
-              );
-            },
-        );
-      },
+                );
+              },
+              childCount: data.length,
+            ),
+          );
+        },
+      ),
     );
   }
 
-  Widget _menuButton(VoidCallback onTapItem1,VoidCallback onTapItem2,Color surface) {
-    return PopupMenuButton<int>(
-      surfaceTintColor: surface,
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      icon: const Icon(Icons.more_horiz),
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
-        PopupMenuItem<int>(
-          value: 0,
-          child: const ListTile(
-            leading: Icon(Icons.edit_calendar_rounded),
-            title: Text('编辑'),
+  Widget _menuButton(BuildContext context, VoidCallback onTapItem1, VoidCallback onTapItem2) {
+    return CupertinoButton(
+      padding: EdgeInsets.zero,
+      child: const Icon(CupertinoIcons.ellipsis),
+      onPressed: () {
+        showCupertinoModalPopup(
+          context: context,
+          builder: (BuildContext context) => CupertinoActionSheet(
+            actions: [
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                  onTapItem1.call();
+                },
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(CupertinoIcons.pencil),
+                    SizedBox(width: 8),
+                    Text('编辑'),
+                  ],
+                ),
+              ),
+              CupertinoActionSheetAction(
+                isDestructiveAction: true,
+                onPressed: () {
+                  Navigator.pop(context);
+                  onTapItem2.call();
+                },
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(CupertinoIcons.delete),
+                    SizedBox(width: 8),
+                    Text('删除'),
+                  ],
+                ),
+              ),
+            ],
+            cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('取消'),
+            ),
           ),
-          onTap: () {
-            onTapItem1.call();
-          },
-        ),
-        PopupMenuItem<int>(
-          value: 1,
-          child: const ListTile(
-            leading: Icon(Icons.delete_outline_rounded),
-            title: Text('删除'),
-          ),
-          onTap: () {
-            onTapItem2.call();
-          },
-        ),
-      ],
+        );
+      },
     );
   }
 }

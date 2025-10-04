@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:themby/src/common/widget/container_tab_indicator.dart';
 import 'package:themby/src/extensions/constrains.dart';
 import 'package:themby/src/features/emby/presentation/emby_library/tab_views/library_all_view.dart';
 import 'package:themby/src/features/emby/presentation/emby_library/tab_views/library_collection_view.dart';
@@ -23,10 +22,9 @@ class EmbyLibraryScreen extends ConsumerStatefulWidget{
   ConsumerState<EmbyLibraryScreen> createState() => _EmbyLibraryScreen();
 }
 
-class _EmbyLibraryScreen extends ConsumerState<EmbyLibraryScreen>  with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
+class _EmbyLibraryScreen extends ConsumerState<EmbyLibraryScreen>  with AutomaticKeepAliveClientMixin {
 
-  late final TabController _tabController = TabController(vsync: this, length: tabs.length);
-
+  int _currentTabIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -34,52 +32,69 @@ class _EmbyLibraryScreen extends ConsumerState<EmbyLibraryScreen>  with Automati
 
     bool isLandscape = MediaQuery.of(context).mdAndUp;
 
-    return Scaffold(
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) => <Widget>[
-          SliverAppBar(
-            pinned: true,
-            floating: true,
-            title: Text(widget.title, style: Theme.of(context).textTheme.titleMedium),
-            centerTitle: true,
-            scrolledUnderElevation: 0.0,
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            bottom: TabBar(
-              controller: _tabController,
-              tabAlignment: tabs.length > 4 ? TabAlignment.start : TabAlignment.center,
-              dividerColor: Colors.transparent,
-              enableFeedback: true,
-              isScrollable: true,
-              splashBorderRadius: BorderRadius.circular(6),
-              padding: EdgeInsets.symmetric(horizontal: isLandscape ? 12 : 5),
-              tabs: tabs.map((e) => Tab(text: e.name)).toList(),
-              labelColor: isLandscape
-                  ? Theme.of(context).colorScheme.onSurface
-                  : Theme.of(context).colorScheme.primary,
-              indicator: isLandscape
-                  ? ContainerTabIndicator(
-                radius: BorderRadius.circular(8.0),
-                color: Theme.of(context).colorScheme.surfaceContainerHighest,
-              )
-                  : null,
-              onTap: (index) {
-                if (!_tabController.indexIsChanging) {
-                  // tap(index);
-                  // tabStateController.setTabIndex(index);
-                }
-              },
-            ),
-          ),
-        ],
-        body: TabBarView(
-          controller: _tabController,
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(widget.title),
+        backgroundColor: CupertinoColors.systemBackground.resolveFrom(context),
+      ),
+      child: SafeArea(
+        child: Column(
           children: [
-            LibraryAllView(parentId: widget.parentId, filter: widget.filter),
-            LibraryRecentView(parentId: widget.parentId, filter: widget.filter),
-            LibraryCollectionView(parentId: widget.parentId, filter: widget.filter),
-            LibraryGenreView(parentId: widget.parentId, filter: widget.filter),
-            LibraryTagView(parentId: widget.parentId, filter: widget.filter),
-            LibraryAllView(parentId: widget.parentId, filter: "IsFavorite"),
+            // Tab Bar
+            Container(
+              decoration: BoxDecoration(
+                color: CupertinoColors.systemBackground.resolveFrom(context),
+                border: Border(
+                  bottom: BorderSide(
+                    color: CupertinoColors.separator.resolveFrom(context),
+                    width: 0.0,
+                  ),
+                ),
+              ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: isLandscape ? 12 : 5),
+                child: CupertinoSlidingSegmentedControl<int>(
+                  groupValue: _currentTabIndex,
+                  children: Map.fromIterable(
+                    List.generate(tabs.length, (index) => index),
+                    key: (index) => index,
+                    value: (index) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      child: Text(
+                        tabs[index].name,
+                        style: TextStyle(
+                          color: _currentTabIndex == index
+                              ? CupertinoColors.white
+                              : CupertinoColors.label.resolveFrom(context),
+                        ),
+                      ),
+                    ),
+                  ),
+                  onValueChanged: (int? value) {
+                    if (value != null) {
+                      setState(() {
+                        _currentTabIndex = value;
+                      });
+                    }
+                  },
+                ),
+              ),
+            ),
+            // Tab View
+            Expanded(
+              child: IndexedStack(
+                index: _currentTabIndex,
+                children: [
+                  LibraryAllView(parentId: widget.parentId, filter: widget.filter),
+                  LibraryRecentView(parentId: widget.parentId, filter: widget.filter),
+                  LibraryCollectionView(parentId: widget.parentId, filter: widget.filter),
+                  LibraryGenreView(parentId: widget.parentId, filter: widget.filter),
+                  LibraryTagView(parentId: widget.parentId, filter: widget.filter),
+                  LibraryAllView(parentId: widget.parentId, filter: "IsFavorite"),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -89,6 +104,3 @@ class _EmbyLibraryScreen extends ConsumerState<EmbyLibraryScreen>  with Automati
   @override
   bool get wantKeepAlive => true;
 }
-
-
-

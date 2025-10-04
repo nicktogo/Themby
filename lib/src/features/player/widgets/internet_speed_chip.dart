@@ -2,7 +2,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:internet_speed_meter/internet_speed_meter.dart';
 
 class InternetSpeedChip extends StatefulWidget{
@@ -83,9 +83,9 @@ class _InternetSpeedChip extends State<InternetSpeedChip>{
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.swap_vert, color: Colors.white, size: 14),
+          const Icon(CupertinoIcons.arrow_up_arrow_down, color: CupertinoColors.white, size: 14),
           const SizedBox(width: 2),
-          Text(_currentSpeed, style: const TextStyle(color: Colors.white, fontSize: 11),),
+          Text(_currentSpeed, style: const TextStyle(color: CupertinoColors.white, fontSize: 11),),
         ],
       ),
     );

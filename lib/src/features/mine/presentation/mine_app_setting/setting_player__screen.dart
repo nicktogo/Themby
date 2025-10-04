@@ -1,10 +1,8 @@
 
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:themby/src/common/data/player_setting.dart';
-import 'package:themby/src/features/emby/data/play_repository.dart';
 import 'package:themby/src/features/mine/widgets/label_text.dart';
 import 'package:themby/src/features/mine/widgets/setting_item.dart';
 import 'package:themby/src/features/mine/widgets/setting_progress%20_bar.dart';
@@ -14,20 +12,19 @@ class SettingPlayerScreen extends ConsumerWidget{
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('播放器'),
-        titleSpacing: 0,
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text('播放器'),
       ),
-      body:  SingleChildScrollView(
-        child: Column(
+      child: SafeArea(
+        child: ListView(
           children: [
             const LabelText(text: "手势"),
             SettingItem(
-              leading: const Icon(Icons.swipe),
+              leading: const Icon(CupertinoIcons.hand_draw),
               title: const Text("定位手势"),
               subtitle: const Text("水平滑动调整视频进度"),
-              trailing: Switch(
+              trailing: CupertinoSwitch(
                 value: ref.watch(playerSettingProvider).horizontalSwipeSeek,
                 onChanged: (value) {
                   ref.read(playerSettingProvider).horizontalSwipeSeek = value;
@@ -40,10 +37,10 @@ class SettingPlayerScreen extends ConsumerWidget{
               },
             ),
             SettingItem(
-              leading: const Icon(Icons.swipe_vertical),
+              leading: const Icon(CupertinoIcons.arrow_up_down),
               title: const Text("滑动手势"),
               subtitle: const Text("垂直滑动调整音量和亮度"),
-              trailing: Switch(
+              trailing: CupertinoSwitch(
                 value: ref.watch(playerSettingProvider).verticalSwipeVolumeAndBrightness,
                 onChanged: (value) {
                   ref.read(playerSettingProvider).verticalSwipeVolumeAndBrightness = value;
@@ -56,10 +53,10 @@ class SettingPlayerScreen extends ConsumerWidget{
               },
             ),
             SettingItem(
-                leading: const Icon(Icons.ads_click),
+                leading: const Icon(CupertinoIcons.hand_thumbsup),
                 title: const Text("双击暂停"),
                 subtitle: const Text("双击屏幕中间暂停"),
-                trailing: Switch(
+                trailing: CupertinoSwitch(
                   value: ref.watch(playerSettingProvider).doubleClickToPause,
                   onChanged: (value) {
                     ref.read(playerSettingProvider).doubleClickToPause = value;
@@ -72,10 +69,10 @@ class SettingPlayerScreen extends ConsumerWidget{
                 },
             ),
             SettingItem(
-              leading: const Icon(Icons.swap_horiz),
+              leading: const Icon(CupertinoIcons.arrow_right_arrow_left),
                 title: const Text("双击快进快退"),
                 subtitle: const Text("双击屏幕两侧快进快退"),
-                trailing: Switch(
+                trailing: CupertinoSwitch(
                   value: ref.watch(playerSettingProvider).doubleClickToJump,
                   onChanged: (value) {
                     ref.read(playerSettingProvider).doubleClickToJump = value;
@@ -108,10 +105,10 @@ class SettingPlayerScreen extends ConsumerWidget{
               },
             ),
             SettingItem(
-                leading: const Icon(Icons.touch_app),
+                leading: const Icon(CupertinoIcons.hand_raised),
                 title: const Text("长按手势"),
                 subtitle: const Text("长按屏幕倍速播放"),
-                trailing: Switch(
+                trailing: CupertinoSwitch(
                   value: ref.watch(playerSettingProvider).longPressSpeed,
                   onChanged: (value) {
                     ref.read(playerSettingProvider).longPressSpeed = value;
@@ -125,29 +122,29 @@ class SettingPlayerScreen extends ConsumerWidget{
             ),
             const LabelText(text: "界面"),
             SettingItem(
-              leading: const Icon(Icons.swap_vert),
+              leading: const Icon(CupertinoIcons.arrow_up_arrow_down),
                 title: const Text("显示缓冲速度"),
                 subtitle: const Text("待做..."),
-                trailing: Switch(
+                trailing: CupertinoSwitch(
                   value: true,
                   onChanged: (value) {},
                 )
             ),
             SettingItem(
-              leading: const Icon(Icons.timer),
+              leading: const Icon(CupertinoIcons.time),
                 title: const Text("显示时间"),
                 subtitle: const Text("待做..."),
-                trailing: Switch(
+                trailing: CupertinoSwitch(
                   value: true,
                   onChanged: (value) {},
                 )
             ),
             const LabelText(text: "控制", subtitle: "mpv设置"),
             SettingItem(
-                leading: const Icon(Icons.hardware),
+                leading: const Icon(CupertinoIcons.device_phone_portrait),
                 title: const Text("启用硬解"),
                 subtitle: const Text("启用 mpv 播放器硬解"),
-                trailing: Switch(
+                trailing: CupertinoSwitch(
                   value: ref.watch(playerSettingProvider).mpvHardDecoding,
                   onChanged: (value) {
                     ref.read(playerSettingProvider).mpvHardDecoding = value;

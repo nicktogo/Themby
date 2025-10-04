@@ -1,4 +1,5 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:themby/src/common/constants.dart';
@@ -30,60 +31,49 @@ class _EmbySearchScreenState extends ConsumerState<EmbySearchScreen>  {
 
     final String query = ref.watch(embySearchQueryNotifierProvider);
 
-    return Scaffold(
+    return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        shape: Border(
+      navigationBar: CupertinoNavigationBar(
+        border: Border(
           bottom: BorderSide(
-            color: Theme.of(context).dividerColor.withOpacity(0.3),
-            width: 1,
+            color: CupertinoColors.separator.resolveFrom(context).withOpacity(0.3),
+            width: 0.5,
           ),
         ),
-        titleSpacing: 0,
-        actions: [
-          IconButton(
-              icon: const Icon(Icons.search,size: 22),
-              onPressed: () {
+        padding: const EdgeInsetsDirectional.all(0),
+        trailing: CupertinoButton(
+          padding: EdgeInsets.zero,
+          child: const Icon(CupertinoIcons.search, size: 22),
+          onPressed: () {
 
-              }
-          ),
-          const SizedBox(width: 10)
-        ],
-        title: TextField(
+          },
+        ),
+        middle: CupertinoSearchTextField(
           autofocus: true,
           controller: _controller,
-          textInputAction: TextInputAction.search,
-          decoration: InputDecoration(
-            hintText: '搜索电影和剧集',
-            border: InputBorder.none,
-            suffixIcon: IconButton(
-              icon: Icon(
-                Icons.clear,
-                size: 22,
-                color: Theme.of(context).colorScheme.outline,
-              ),
-              onPressed: () {
-                ref.read(embySearchQueryNotifierProvider.notifier)
-                    .setQuery('');
-                _controller.clear();
-              },
-            ),
-          ),
-          onEditingComplete: () {
+          placeholder: '搜索电影和剧集',
+          suffixMode: OverlayVisibilityMode.editing,
+          onSubmitted: (value) {
             FocusManager.instance.primaryFocus?.unfocus();
           },
           onChanged: (value) {
             ref.read(embySearchQueryNotifierProvider.notifier)
                 .setQuery(value);
           },
+          onSuffixTap: () {
+            ref.read(embySearchQueryNotifierProvider.notifier)
+                .setQuery('');
+            _controller.clear();
+          },
         ),
       ),
-
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: query.isNotEmpty
-            ? const EmbySearchItem()
-            : const EmbySearchSuggests(),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: query.isNotEmpty
+              ? const EmbySearchItem()
+              : const EmbySearchSuggests(),
+        ),
       ),
     );
   }

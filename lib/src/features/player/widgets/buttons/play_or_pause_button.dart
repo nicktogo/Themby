@@ -2,7 +2,7 @@
 
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:themby/src/features/player/service/themby_controller.dart';
 
@@ -38,10 +38,12 @@ class _PlayOrPauseButtonState extends ConsumerState<PlayOrPauseButton>{
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(
-        isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
-        color: Colors.white,
+    return CupertinoButton(
+      padding: EdgeInsets.zero,
+      minSize: 44,
+      child: Icon(
+        isPlaying ? CupertinoIcons.pause_fill : CupertinoIcons.play_fill,
+        color: CupertinoColors.white,
         size: 30,
       ),
       onPressed: (){

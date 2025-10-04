@@ -1,5 +1,5 @@
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:themby/src/common/data/subtitle_setting.dart';
 import 'package:themby/src/features/mine/widgets/label_text.dart';
@@ -12,13 +12,12 @@ class SubtitleSettingScreen extends ConsumerWidget{
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('字幕外观'),
-        titleSpacing: 0.0,
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text('字幕外观'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
+      child: SafeArea(
+        child: ListView(
           children: [
             const LabelText(text: "外观"),
             Container(
@@ -50,10 +49,10 @@ class SubtitleSettingScreen extends ConsumerWidget{
               },
             ),
             SettingItem(
-                leading: const Icon(Icons.format_bold_rounded),
+                leading: const Icon(CupertinoIcons.bold),
                 title: const Text("粗体字幕文本"),
                 subtitle: const Text("字幕使用粗体"),
-                trailing: Switch(
+                trailing: CupertinoSwitch(
                   value: ref.watch(subtitleSettingProvider).subtitleBold,
                   onChanged: (value) {
                     ref.read(subtitleSettingProvider).subtitleBold = value;

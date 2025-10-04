@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -91,24 +92,27 @@ class ScaffoldWithNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: body,
-      bottomNavigationBar: NavigationBar(
-        height: 64,
-        selectedIndex: currentIndex,
-        destinations: [
-          NavigationDestination(
-            selectedIcon: Icon(Icons.video_library, color: Theme.of(context).colorScheme.primary),
-            icon: const Icon(Icons.video_library),
-            label: 'library'.hardcoded,
-          ),
-          NavigationDestination(
-            selectedIcon: Icon(Icons.favorite_rounded, color: Theme.of(context).colorScheme.primary),
-            icon: const Icon(Icons.favorite_border_rounded),
-            label: 'favorite'.hardcoded,
+    return CupertinoPageScaffold(
+      child: Column(
+        children: [
+          Expanded(child: body),
+          CupertinoTabBar(
+            currentIndex: currentIndex,
+            onTap: onDestinationSelected,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(CupertinoIcons.film),
+                activeIcon: Icon(CupertinoIcons.film_fill),
+                label: 'Library',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(CupertinoIcons.heart),
+                activeIcon: Icon(CupertinoIcons.heart_fill),
+                label: 'Favorite',
+              ),
+            ],
           ),
         ],
-        onDestinationSelected: onDestinationSelected,
       ),
     );
   }
@@ -127,28 +131,78 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Row(
+    return CupertinoPageScaffold(
+      child: Row(
         children: [
-          NavigationRail(
-            selectedIndex: currentIndex,
-            onDestinationSelected: onDestinationSelected,
-            labelType: NavigationRailLabelType.all,
-            destinations: <NavigationRailDestination>[
-              NavigationRailDestination(
-                icon: const Icon(Icons.video_library),
-                label: Text('library'.hardcoded),
+          Container(
+            width: 88,
+            decoration: BoxDecoration(
+              border: Border(
+                right: BorderSide(
+                  color: CupertinoColors.separator.resolveFrom(context),
+                  width: 0.5,
+                ),
               ),
-              NavigationRailDestination(
-                icon: const Icon(Icons.favorite),
-                label: Text('favorite'.hardcoded),
-              ),
-            ],
+            ),
+            child: Column(
+              children: [
+                const SizedBox(height: 60),
+                _buildNavItem(
+                  context,
+                  icon: CupertinoIcons.film,
+                  activeIcon: CupertinoIcons.film_fill,
+                  label: 'library'.hardcoded,
+                  isSelected: currentIndex == 0,
+                  onTap: () => onDestinationSelected(0),
+                ),
+                const SizedBox(height: 20),
+                _buildNavItem(
+                  context,
+                  icon: CupertinoIcons.heart,
+                  activeIcon: CupertinoIcons.heart_fill,
+                  label: 'favorite'.hardcoded,
+                  isSelected: currentIndex == 1,
+                  onTap: () => onDestinationSelected(1),
+                ),
+              ],
+            ),
           ),
-          const VerticalDivider(thickness: 1, width: 1),
-          // This is the main content.
-          Expanded(
-            child: body,
+          Expanded(child: body),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNavItem(
+    BuildContext context, {
+    required IconData icon,
+    required IconData activeIcon,
+    required String label,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return CupertinoButton(
+      padding: EdgeInsets.zero,
+      onPressed: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            isSelected ? activeIcon : icon,
+            color: isSelected
+                ? CupertinoColors.activeBlue
+                : CupertinoColors.inactiveGray,
+            size: 28,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              color: isSelected
+                  ? CupertinoColors.activeBlue
+                  : CupertinoColors.inactiveGray,
+            ),
           ),
         ],
       ),

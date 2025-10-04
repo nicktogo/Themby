@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -95,7 +96,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/app_setting',
         name: AppRoute.mineAppSetting.name,
-        pageBuilder: (context, state) => MaterialPage(
+        pageBuilder: (context, state) => CupertinoPage(
           key: state.pageKey,
           child: const MineAppSettingScreen(),
         ),
@@ -103,7 +104,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/play_setting',
         name: AppRoute.playSetting.name,
-        pageBuilder: (context, state) => MaterialPage(
+        pageBuilder: (context, state) => CupertinoPage(
           key: state.pageKey,
           child: const SettingPlayerScreen(),
         ),
@@ -111,7 +112,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/subtitle_setting',
         name: AppRoute.subtitleSetting.name,
-        pageBuilder: (context, state) => MaterialPage(
+        pageBuilder: (context, state) => CupertinoPage(
           key: state.pageKey,
           child: const SubtitleSettingScreen(),
         ),
@@ -119,7 +120,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/sync_setting',
         name: AppRoute.syncSetting.name,
-        pageBuilder: (context, state) => MaterialPage(
+        pageBuilder: (context, state) => CupertinoPage(
           key: state.pageKey,
           child: const SyncSettingScreen(),
         ),
@@ -127,7 +128,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/cache_setting',
         name: AppRoute.cacheSetting.name,
-        pageBuilder: (context, state) => MaterialPage(
+        pageBuilder: (context, state) => CupertinoPage(
           key: state.pageKey,
           child: const CacheSettingScreen(),
         ),
@@ -135,7 +136,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/about',
         name: AppRoute.about.name,
-        pageBuilder: (context, state) => MaterialPage(
+        pageBuilder: (context, state) => CupertinoPage(
           key: state.pageKey,
           child: const AboutScreen(),
         ),
@@ -165,7 +166,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                   final title = state.uri.queryParameters['title']!;
                   final filter = state.uri.queryParameters['filter']!;
 
-                  return MaterialPage(
+                  return CupertinoPage(
                     key: state.pageKey,
                     child: EmbyLibraryScreen(parentId: parentId, title: title,filter: filter),
                   );
@@ -179,7 +180,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                   final genreIds = state.uri.queryParameters['genreIds'];
                   final title = state.uri.queryParameters['title']!;
                   final filter = state.uri.queryParameters['filter']!;
-                  return MaterialPage(
+                  return CupertinoPage(
                     key: state.pageKey,
                     child: EmbyLibraryItemsScreen(parentId: parentId, title: title,filter: filter,genreIds: genreIds),
                   );
@@ -188,7 +189,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: '/emby/search',
                 name: AppRoute.search.name,
-                pageBuilder: (context, state) => MaterialPage(
+                pageBuilder: (context, state) => CupertinoPage(
                   key: state.pageKey,
                   child: const EmbySearchScreen(),
                 )
@@ -215,7 +216,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         name: AppRoute.details.name,
         pageBuilder: (context, state) {
           final id = state.pathParameters['id']!;
-          return MaterialPage(
+          return CupertinoPage(
             key: state.pageKey,
             child: EmbyMediaDetails(id: id),
           );
@@ -226,7 +227,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         name: AppRoute.season.name,
         pageBuilder: (context, state) {
           final id = state.pathParameters['id']!;
-          return MaterialPage(
+          return CupertinoPage(
             key: state.pageKey,
             child: EmbySeasonDetails(id),
           );
@@ -238,7 +239,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) {
 
           SelectedMedia select = state.extra as SelectedMedia;
-          return MaterialPage(
+          return CupertinoPage(
             key: state.pageKey,
             child: PlayerScreen(
               media: select,

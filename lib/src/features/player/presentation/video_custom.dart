@@ -3,7 +3,7 @@
 import 'dart:io';
 
 import 'package:auto_orientation/auto_orientation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:themby/src/common/constants.dart';
