@@ -1,6 +1,6 @@
 
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:themby/src/common/constants.dart';
 import 'package:themby/src/features/emby/data/view_repository.dart';
@@ -37,8 +37,8 @@ class LibraryFilterTool extends ConsumerWidget{
     return SliverPersistentHeader(
       pinned: true,
       delegate: FixedHeaderDelegate(
-        minExtent: 24.0,
-        maxExtent: 36.0,
+        minExtent: 44.0,
+        maxExtent: 44.0,
         totalRecordCount: totalRecordCount ?? 0,
       ),
     );
@@ -61,9 +61,9 @@ class FixedHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
-      margin: const EdgeInsets.only(top: 6,bottom: 12),
-      padding: const EdgeInsets.symmetric(horizontal: StyleString.safeSpace),
-      color: Theme.of(context).scaffoldBackgroundColor,
+      padding: const EdgeInsets.symmetric(horizontal: StyleString.safeSpace, vertical: 8),
+      color: CupertinoColors.systemBackground.resolveFrom(context),
+      alignment: Alignment.center,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

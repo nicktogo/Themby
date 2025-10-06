@@ -1,5 +1,5 @@
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:themby/src/features/emby/data/view_repository.dart';
 import 'package:themby/src/features/emby/presentation/emby_library/emby_library_query_notifier.dart';
@@ -17,27 +17,26 @@ class LibraryAllView extends ConsumerWidget{
 
     final itemQuery = ref.watch(embyLibraryQueryNotifierProvider);
 
-    return RefreshIndicator(
-      onRefresh: () async {
-        ref.invalidate(getItemProvider);
-        ref.read(getItemProvider(
-        itemQuery: (
-          page: 0,
-          parentId: parentId,
-          genreIds: '',
-          includeItemTypes: itemQuery.includeItemTypes,
-          sortBy: itemQuery.sortBy,
-          sortOrder: itemQuery.sortOrder,
-          filters: filter,
-        )).future);
-      },
-      child: CustomScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-        slivers: [
-          LibraryFilterTool(parentId: parentId, filter: filter),
-          LibraryGridItems(parentId: parentId, filter: filter),
-        ],
-      ),
+    return CustomScrollView(
+      slivers: [
+        CupertinoSliverRefreshControl(
+          onRefresh: () async {
+            ref.invalidate(getItemProvider);
+            await ref.read(getItemProvider(
+            itemQuery: (
+              page: 0,
+              parentId: parentId,
+              genreIds: '',
+              includeItemTypes: itemQuery.includeItemTypes,
+              sortBy: itemQuery.sortBy,
+              sortOrder: itemQuery.sortOrder,
+              filters: filter,
+            )).future);
+          },
+        ),
+        LibraryFilterTool(parentId: parentId, filter: filter),
+        LibraryGridItems(parentId: parentId, filter: filter),
+      ],
     );
   }
 }

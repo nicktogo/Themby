@@ -51,33 +51,40 @@ class _EmbyLibraryScreen extends ConsumerState<EmbyLibraryScreen>  with Automati
                   ),
                 ),
               ),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.symmetric(horizontal: isLandscape ? 12 : 5),
-                child: CupertinoSlidingSegmentedControl<int>(
-                  groupValue: _currentTabIndex,
-                  children: Map.fromIterable(
-                    List.generate(tabs.length, (index) => index),
-                    key: (index) => index,
-                    value: (index) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      child: Text(
-                        tabs[index].name,
-                        style: TextStyle(
-                          color: _currentTabIndex == index
-                              ? CupertinoColors.white
-                              : CupertinoColors.label.resolveFrom(context),
+                padding: EdgeInsets.symmetric(horizontal: isLandscape ? 12 : 8),
+                child: Row(
+                  children: List.generate(tabs.length, (index) {
+                    final isSelected = _currentTabIndex == index;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _currentTabIndex = index;
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? CupertinoColors.systemGrey5.resolveFrom(context)
+                                : CupertinoColors.systemBackground.resolveFrom(context),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            tabs[index].name,
+                            style: TextStyle(
+                              color: CupertinoColors.label.resolveFrom(context),
+                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  onValueChanged: (int? value) {
-                    if (value != null) {
-                      setState(() {
-                        _currentTabIndex = value;
-                      });
-                    }
-                  },
+                    );
+                  }),
                 ),
               ),
             ),

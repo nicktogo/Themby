@@ -22,7 +22,6 @@ class LibraryGenreView extends ConsumerWidget{
     final mediaQuery = MediaQuery.of(context);
 
     return CustomScrollView(
-      physics: const NeverScrollableScrollPhysics(),
       slivers: [
         SliverToBoxAdapter(
           child: Container(
