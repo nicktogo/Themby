@@ -43,7 +43,9 @@ void main() async {
   }
 
   final prefs = await SharedPreferences.getInstance();
-  final directory = await getApplicationDocumentsDirectory();
+  final directory = Platform.isMacOS
+      ? await getApplicationSupportDirectory()
+      : await getApplicationDocumentsDirectory();
   final store = Store(getObjectBoxModel(), directory: join(directory.path, 'objectbox'));
   final deviceInfo = await initDevice();
   final packageInfo = await PackageInfo.fromPlatform();
